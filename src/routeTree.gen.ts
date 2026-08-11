@@ -10,33 +10,210 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/contacts'
+import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
+import { Route as ApiPublicV1SuppressionsRouteImport } from './routes/api/public/v1/suppressions'
+import { Route as ApiPublicV1WorkspacesRouteImport } from './routes/api/public/v1/workspaces'
+import { Route as ApiPublicV1AuthRefreshRouteImport } from './routes/api/public/v1/auth/refresh'
+import { Route as ApiPublicV1AuthTokenRouteImport } from './routes/api/public/v1/auth/token'
+import { Route as ApiPublicV1CreditsBalanceRouteImport } from './routes/api/public/v1/credits/balance'
+import { Route as ApiPublicV1CreditsConsumeRouteImport } from './routes/api/public/v1/credits/consume'
+import { Route as ApiPublicV1CreditsLedgerRouteImport } from './routes/api/public/v1/credits/ledger'
+import { Route as ApiPublicV1CreditsRefundRouteImport } from './routes/api/public/v1/credits/refund'
+import { Route as ApiPublicV1MessagesSendRouteImport } from './routes/api/public/v1/messages/send'
+import { Route as ApiPublicV1PolicyAssertRouteImport } from './routes/api/public/v1/policy/assert'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1ContactsRoute = ApiPublicV1ContactsRouteImport.update({
+  id: '/api/public/v1/contacts',
+  path: '/api/public/v1/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
+  id: '/api/public/v1/me',
+  path: '/api/public/v1/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1SuppressionsRoute = ApiPublicV1SuppressionsRouteImport.update({
+  id: '/api/public/v1/suppressions',
+  path: '/api/public/v1/suppressions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1WorkspacesRoute = ApiPublicV1WorkspacesRouteImport.update({
+  id: '/api/public/v1/workspaces',
+  path: '/api/public/v1/workspaces',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1AuthRefreshRoute = ApiPublicV1AuthRefreshRouteImport.update({
+  id: '/api/public/v1/auth/refresh',
+  path: '/api/public/v1/auth/refresh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1AuthTokenRoute = ApiPublicV1AuthTokenRouteImport.update({
+  id: '/api/public/v1/auth/token',
+  path: '/api/public/v1/auth/token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CreditsBalanceRoute =
+  ApiPublicV1CreditsBalanceRouteImport.update({
+    id: '/api/public/v1/credits/balance',
+    path: '/api/public/v1/credits/balance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsConsumeRoute =
+  ApiPublicV1CreditsConsumeRouteImport.update({
+    id: '/api/public/v1/credits/consume',
+    path: '/api/public/v1/credits/consume',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsLedgerRoute =
+  ApiPublicV1CreditsLedgerRouteImport.update({
+    id: '/api/public/v1/credits/ledger',
+    path: '/api/public/v1/credits/ledger',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsRefundRoute =
+  ApiPublicV1CreditsRefundRouteImport.update({
+    id: '/api/public/v1/credits/refund',
+    path: '/api/public/v1/credits/refund',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1MessagesSendRoute = ApiPublicV1MessagesSendRouteImport.update({
+  id: '/api/public/v1/messages/send',
+  path: '/api/public/v1/messages/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
+  id: '/api/public/v1/policy/assert',
+  path: '/api/public/v1/policy/assert',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  ApiPublicV1ContactsRoute: typeof ApiPublicV1ContactsRoute
+  ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
+  ApiPublicV1SuppressionsRoute: typeof ApiPublicV1SuppressionsRoute
+  ApiPublicV1WorkspacesRoute: typeof ApiPublicV1WorkspacesRoute
+  ApiPublicV1AuthRefreshRoute: typeof ApiPublicV1AuthRefreshRoute
+  ApiPublicV1AuthTokenRoute: typeof ApiPublicV1AuthTokenRoute
+  ApiPublicV1CreditsBalanceRoute: typeof ApiPublicV1CreditsBalanceRoute
+  ApiPublicV1CreditsConsumeRoute: typeof ApiPublicV1CreditsConsumeRoute
+  ApiPublicV1CreditsLedgerRoute: typeof ApiPublicV1CreditsLedgerRoute
+  ApiPublicV1CreditsRefundRoute: typeof ApiPublicV1CreditsRefundRoute
+  ApiPublicV1MessagesSendRoute: typeof ApiPublicV1MessagesSendRoute
+  ApiPublicV1PolicyAssertRoute: typeof ApiPublicV1PolicyAssertRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +225,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/contacts': {
+      id: '/api/public/v1/contacts'
+      path: '/api/public/v1/contacts'
+      fullPath: '/api/public/v1/contacts'
+      preLoaderRoute: typeof ApiPublicV1ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/me': {
+      id: '/api/public/v1/me'
+      path: '/api/public/v1/me'
+      fullPath: '/api/public/v1/me'
+      preLoaderRoute: typeof ApiPublicV1MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/suppressions': {
+      id: '/api/public/v1/suppressions'
+      path: '/api/public/v1/suppressions'
+      fullPath: '/api/public/v1/suppressions'
+      preLoaderRoute: typeof ApiPublicV1SuppressionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/workspaces': {
+      id: '/api/public/v1/workspaces'
+      path: '/api/public/v1/workspaces'
+      fullPath: '/api/public/v1/workspaces'
+      preLoaderRoute: typeof ApiPublicV1WorkspacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/auth/refresh': {
+      id: '/api/public/v1/auth/refresh'
+      path: '/api/public/v1/auth/refresh'
+      fullPath: '/api/public/v1/auth/refresh'
+      preLoaderRoute: typeof ApiPublicV1AuthRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/auth/token': {
+      id: '/api/public/v1/auth/token'
+      path: '/api/public/v1/auth/token'
+      fullPath: '/api/public/v1/auth/token'
+      preLoaderRoute: typeof ApiPublicV1AuthTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/balance': {
+      id: '/api/public/v1/credits/balance'
+      path: '/api/public/v1/credits/balance'
+      fullPath: '/api/public/v1/credits/balance'
+      preLoaderRoute: typeof ApiPublicV1CreditsBalanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/consume': {
+      id: '/api/public/v1/credits/consume'
+      path: '/api/public/v1/credits/consume'
+      fullPath: '/api/public/v1/credits/consume'
+      preLoaderRoute: typeof ApiPublicV1CreditsConsumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/ledger': {
+      id: '/api/public/v1/credits/ledger'
+      path: '/api/public/v1/credits/ledger'
+      fullPath: '/api/public/v1/credits/ledger'
+      preLoaderRoute: typeof ApiPublicV1CreditsLedgerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/refund': {
+      id: '/api/public/v1/credits/refund'
+      path: '/api/public/v1/credits/refund'
+      fullPath: '/api/public/v1/credits/refund'
+      preLoaderRoute: typeof ApiPublicV1CreditsRefundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/messages/send': {
+      id: '/api/public/v1/messages/send'
+      path: '/api/public/v1/messages/send'
+      fullPath: '/api/public/v1/messages/send'
+      preLoaderRoute: typeof ApiPublicV1MessagesSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policy/assert': {
+      id: '/api/public/v1/policy/assert'
+      path: '/api/public/v1/policy/assert'
+      fullPath: '/api/public/v1/policy/assert'
+      preLoaderRoute: typeof ApiPublicV1PolicyAssertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  ApiPublicV1ContactsRoute: ApiPublicV1ContactsRoute,
+  ApiPublicV1MeRoute: ApiPublicV1MeRoute,
+  ApiPublicV1SuppressionsRoute: ApiPublicV1SuppressionsRoute,
+  ApiPublicV1WorkspacesRoute: ApiPublicV1WorkspacesRoute,
+  ApiPublicV1AuthRefreshRoute: ApiPublicV1AuthRefreshRoute,
+  ApiPublicV1AuthTokenRoute: ApiPublicV1AuthTokenRoute,
+  ApiPublicV1CreditsBalanceRoute: ApiPublicV1CreditsBalanceRoute,
+  ApiPublicV1CreditsConsumeRoute: ApiPublicV1CreditsConsumeRoute,
+  ApiPublicV1CreditsLedgerRoute: ApiPublicV1CreditsLedgerRoute,
+  ApiPublicV1CreditsRefundRoute: ApiPublicV1CreditsRefundRoute,
+  ApiPublicV1MessagesSendRoute: ApiPublicV1MessagesSendRoute,
+  ApiPublicV1PolicyAssertRoute: ApiPublicV1PolicyAssertRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
