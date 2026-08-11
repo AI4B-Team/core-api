@@ -47,11 +47,22 @@ function AuthScreen() {
   const [busy, setBusy] = useState(false);
   const [linkSent, setLinkSent] = useState(false);
 
+  let appIdFromRedirect: string | undefined;
+  try {
+    if (search.redirect) {
+      const v = new URLSearchParams(search.redirect.split("?")[1] ?? "").get("app_id");
+      appIdFromRedirect = v ?? undefined;
+    }
+  } catch {
+    appIdFromRedirect = undefined;
+  }
+  const appId = search.app_id ?? appIdFromRedirect;
+
   const brandFn = useServerFn(getAuthBranding);
   const { data: branding } = useQuery({
-    queryKey: ["auth-branding", search.app_id ?? null, search.account ?? null],
+    queryKey: ["auth-branding", appId ?? null, search.account ?? null],
     queryFn: () =>
-      brandFn({ data: { appId: search.app_id ?? undefined, accountId: search.account ?? undefined } }),
+      brandFn({ data: { appId: appId ?? undefined, accountId: search.account ?? undefined } }),
   });
 
   useEffect(() => {
