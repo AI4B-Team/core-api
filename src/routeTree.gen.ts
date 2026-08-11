@@ -10,33 +10,342 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAuthorizeRouteImport } from './routes/_authenticated/authorize'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminAppsRouteImport } from './routes/_authenticated/admin/apps'
+import { Route as AuthenticatedAdminComplianceRouteImport } from './routes/_authenticated/admin/compliance'
+import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin/contacts'
+import { Route as AuthenticatedAdminMessagingRouteImport } from './routes/_authenticated/admin/messaging'
+import { Route as AuthenticatedAdminPolicyRouteImport } from './routes/_authenticated/admin/policy'
+import { Route as AuthenticatedAdminWorkspacesIndexRouteImport } from './routes/_authenticated/admin/workspaces/index'
+import { Route as AuthenticatedAdminWorkspacesWorkspaceIdRouteImport } from './routes/_authenticated/admin/workspaces/$workspaceId'
+import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/contacts'
+import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
+import { Route as ApiPublicV1SuppressionsRouteImport } from './routes/api/public/v1/suppressions'
+import { Route as ApiPublicV1WorkspacesRouteImport } from './routes/api/public/v1/workspaces'
+import { Route as ApiPublicV1AuthRefreshRouteImport } from './routes/api/public/v1/auth/refresh'
+import { Route as ApiPublicV1AuthTokenRouteImport } from './routes/api/public/v1/auth/token'
+import { Route as ApiPublicV1CreditsBalanceRouteImport } from './routes/api/public/v1/credits/balance'
+import { Route as ApiPublicV1CreditsConsumeRouteImport } from './routes/api/public/v1/credits/consume'
+import { Route as ApiPublicV1CreditsLedgerRouteImport } from './routes/api/public/v1/credits/ledger'
+import { Route as ApiPublicV1CreditsRefundRouteImport } from './routes/api/public/v1/credits/refund'
+import { Route as ApiPublicV1MessagesSendRouteImport } from './routes/api/public/v1/messages/send'
+import { Route as ApiPublicV1PolicyAssertRouteImport } from './routes/api/public/v1/policy/assert'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAuthorizeRoute = AuthenticatedAuthorizeRouteImport.update({
+  id: '/authorize',
+  path: '/authorize',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAppsRoute = AuthenticatedAdminAppsRouteImport.update({
+  id: '/apps',
+  path: '/apps',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminComplianceRoute =
+  AuthenticatedAdminComplianceRouteImport.update({
+    id: '/compliance',
+    path: '/compliance',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContactsRoute =
+  AuthenticatedAdminContactsRouteImport.update({
+    id: '/contacts',
+    path: '/contacts',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMessagingRoute =
+  AuthenticatedAdminMessagingRouteImport.update({
+    id: '/messaging',
+    path: '/messaging',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPolicyRoute =
+  AuthenticatedAdminPolicyRouteImport.update({
+    id: '/policy',
+    path: '/policy',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminWorkspacesIndexRoute =
+  AuthenticatedAdminWorkspacesIndexRouteImport.update({
+    id: '/workspaces/',
+    path: '/workspaces/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminWorkspacesWorkspaceIdRoute =
+  AuthenticatedAdminWorkspacesWorkspaceIdRouteImport.update({
+    id: '/workspaces/$workspaceId',
+    path: '/workspaces/$workspaceId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const ApiPublicV1ContactsRoute = ApiPublicV1ContactsRouteImport.update({
+  id: '/api/public/v1/contacts',
+  path: '/api/public/v1/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
+  id: '/api/public/v1/me',
+  path: '/api/public/v1/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1SuppressionsRoute = ApiPublicV1SuppressionsRouteImport.update({
+  id: '/api/public/v1/suppressions',
+  path: '/api/public/v1/suppressions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1WorkspacesRoute = ApiPublicV1WorkspacesRouteImport.update({
+  id: '/api/public/v1/workspaces',
+  path: '/api/public/v1/workspaces',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1AuthRefreshRoute = ApiPublicV1AuthRefreshRouteImport.update({
+  id: '/api/public/v1/auth/refresh',
+  path: '/api/public/v1/auth/refresh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1AuthTokenRoute = ApiPublicV1AuthTokenRouteImport.update({
+  id: '/api/public/v1/auth/token',
+  path: '/api/public/v1/auth/token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CreditsBalanceRoute =
+  ApiPublicV1CreditsBalanceRouteImport.update({
+    id: '/api/public/v1/credits/balance',
+    path: '/api/public/v1/credits/balance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsConsumeRoute =
+  ApiPublicV1CreditsConsumeRouteImport.update({
+    id: '/api/public/v1/credits/consume',
+    path: '/api/public/v1/credits/consume',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsLedgerRoute =
+  ApiPublicV1CreditsLedgerRouteImport.update({
+    id: '/api/public/v1/credits/ledger',
+    path: '/api/public/v1/credits/ledger',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CreditsRefundRoute =
+  ApiPublicV1CreditsRefundRouteImport.update({
+    id: '/api/public/v1/credits/refund',
+    path: '/api/public/v1/credits/refund',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1MessagesSendRoute = ApiPublicV1MessagesSendRouteImport.update({
+  id: '/api/public/v1/messages/send',
+  path: '/api/public/v1/messages/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
+  id: '/api/public/v1/policy/assert',
+  path: '/api/public/v1/policy/assert',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/authorize': typeof AuthenticatedAuthorizeRoute
+  '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/admin/policy': typeof AuthenticatedAdminPolicyRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/authorize': typeof AuthenticatedAuthorizeRoute
+  '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/admin/policy': typeof AuthenticatedAdminPolicyRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/admin/workspaces': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/authorize': typeof AuthenticatedAuthorizeRoute
+  '/_authenticated/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/_authenticated/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/_authenticated/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/_authenticated/admin/policy': typeof AuthenticatedAdminPolicyRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
+  '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
+  '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
+  '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/_authenticated/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
+  '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
+  '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
+  '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
+  '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
+  '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
+  '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/admin'
+    | '/authorize'
+    | '/admin/apps'
+    | '/admin/compliance'
+    | '/admin/contacts'
+    | '/admin/messaging'
+    | '/admin/policy'
+    | '/admin/'
+    | '/admin/workspaces/$workspaceId'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/admin/workspaces/'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/authorize'
+    | '/admin/apps'
+    | '/admin/compliance'
+    | '/admin/contacts'
+    | '/admin/messaging'
+    | '/admin/policy'
+    | '/admin'
+    | '/admin/workspaces/$workspaceId'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/admin/workspaces'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/admin'
+    | '/_authenticated/authorize'
+    | '/_authenticated/admin/apps'
+    | '/_authenticated/admin/compliance'
+    | '/_authenticated/admin/contacts'
+    | '/_authenticated/admin/messaging'
+    | '/_authenticated/admin/policy'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/workspaces/$workspaceId'
+    | '/api/public/v1/contacts'
+    | '/api/public/v1/me'
+    | '/api/public/v1/suppressions'
+    | '/api/public/v1/workspaces'
+    | '/_authenticated/admin/workspaces/'
+    | '/api/public/v1/auth/refresh'
+    | '/api/public/v1/auth/token'
+    | '/api/public/v1/credits/balance'
+    | '/api/public/v1/credits/consume'
+    | '/api/public/v1/credits/ledger'
+    | '/api/public/v1/credits/refund'
+    | '/api/public/v1/messages/send'
+    | '/api/public/v1/policy/assert'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ApiPublicV1ContactsRoute: typeof ApiPublicV1ContactsRoute
+  ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
+  ApiPublicV1SuppressionsRoute: typeof ApiPublicV1SuppressionsRoute
+  ApiPublicV1WorkspacesRoute: typeof ApiPublicV1WorkspacesRoute
+  ApiPublicV1AuthRefreshRoute: typeof ApiPublicV1AuthRefreshRoute
+  ApiPublicV1AuthTokenRoute: typeof ApiPublicV1AuthTokenRoute
+  ApiPublicV1CreditsBalanceRoute: typeof ApiPublicV1CreditsBalanceRoute
+  ApiPublicV1CreditsConsumeRoute: typeof ApiPublicV1CreditsConsumeRoute
+  ApiPublicV1CreditsLedgerRoute: typeof ApiPublicV1CreditsLedgerRoute
+  ApiPublicV1CreditsRefundRoute: typeof ApiPublicV1CreditsRefundRoute
+  ApiPublicV1MessagesSendRoute: typeof ApiPublicV1MessagesSendRoute
+  ApiPublicV1PolicyAssertRoute: typeof ApiPublicV1PolicyAssertRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +357,234 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/authorize': {
+      id: '/_authenticated/authorize'
+      path: '/authorize'
+      fullPath: '/authorize'
+      preLoaderRoute: typeof AuthenticatedAuthorizeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/apps': {
+      id: '/_authenticated/admin/apps'
+      path: '/apps'
+      fullPath: '/admin/apps'
+      preLoaderRoute: typeof AuthenticatedAdminAppsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/compliance': {
+      id: '/_authenticated/admin/compliance'
+      path: '/compliance'
+      fullPath: '/admin/compliance'
+      preLoaderRoute: typeof AuthenticatedAdminComplianceRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/contacts': {
+      id: '/_authenticated/admin/contacts'
+      path: '/contacts'
+      fullPath: '/admin/contacts'
+      preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/messaging': {
+      id: '/_authenticated/admin/messaging'
+      path: '/messaging'
+      fullPath: '/admin/messaging'
+      preLoaderRoute: typeof AuthenticatedAdminMessagingRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/policy': {
+      id: '/_authenticated/admin/policy'
+      path: '/policy'
+      fullPath: '/admin/policy'
+      preLoaderRoute: typeof AuthenticatedAdminPolicyRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/workspaces/': {
+      id: '/_authenticated/admin/workspaces/'
+      path: '/workspaces'
+      fullPath: '/admin/workspaces/'
+      preLoaderRoute: typeof AuthenticatedAdminWorkspacesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/workspaces/$workspaceId': {
+      id: '/_authenticated/admin/workspaces/$workspaceId'
+      path: '/workspaces/$workspaceId'
+      fullPath: '/admin/workspaces/$workspaceId'
+      preLoaderRoute: typeof AuthenticatedAdminWorkspacesWorkspaceIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/public/v1/contacts': {
+      id: '/api/public/v1/contacts'
+      path: '/api/public/v1/contacts'
+      fullPath: '/api/public/v1/contacts'
+      preLoaderRoute: typeof ApiPublicV1ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/me': {
+      id: '/api/public/v1/me'
+      path: '/api/public/v1/me'
+      fullPath: '/api/public/v1/me'
+      preLoaderRoute: typeof ApiPublicV1MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/suppressions': {
+      id: '/api/public/v1/suppressions'
+      path: '/api/public/v1/suppressions'
+      fullPath: '/api/public/v1/suppressions'
+      preLoaderRoute: typeof ApiPublicV1SuppressionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/workspaces': {
+      id: '/api/public/v1/workspaces'
+      path: '/api/public/v1/workspaces'
+      fullPath: '/api/public/v1/workspaces'
+      preLoaderRoute: typeof ApiPublicV1WorkspacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/auth/refresh': {
+      id: '/api/public/v1/auth/refresh'
+      path: '/api/public/v1/auth/refresh'
+      fullPath: '/api/public/v1/auth/refresh'
+      preLoaderRoute: typeof ApiPublicV1AuthRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/auth/token': {
+      id: '/api/public/v1/auth/token'
+      path: '/api/public/v1/auth/token'
+      fullPath: '/api/public/v1/auth/token'
+      preLoaderRoute: typeof ApiPublicV1AuthTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/balance': {
+      id: '/api/public/v1/credits/balance'
+      path: '/api/public/v1/credits/balance'
+      fullPath: '/api/public/v1/credits/balance'
+      preLoaderRoute: typeof ApiPublicV1CreditsBalanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/consume': {
+      id: '/api/public/v1/credits/consume'
+      path: '/api/public/v1/credits/consume'
+      fullPath: '/api/public/v1/credits/consume'
+      preLoaderRoute: typeof ApiPublicV1CreditsConsumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/ledger': {
+      id: '/api/public/v1/credits/ledger'
+      path: '/api/public/v1/credits/ledger'
+      fullPath: '/api/public/v1/credits/ledger'
+      preLoaderRoute: typeof ApiPublicV1CreditsLedgerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/credits/refund': {
+      id: '/api/public/v1/credits/refund'
+      path: '/api/public/v1/credits/refund'
+      fullPath: '/api/public/v1/credits/refund'
+      preLoaderRoute: typeof ApiPublicV1CreditsRefundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/messages/send': {
+      id: '/api/public/v1/messages/send'
+      path: '/api/public/v1/messages/send'
+      fullPath: '/api/public/v1/messages/send'
+      preLoaderRoute: typeof ApiPublicV1MessagesSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policy/assert': {
+      id: '/api/public/v1/policy/assert'
+      path: '/api/public/v1/policy/assert'
+      fullPath: '/api/public/v1/policy/assert'
+      preLoaderRoute: typeof ApiPublicV1PolicyAssertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAppsRoute: typeof AuthenticatedAdminAppsRoute
+  AuthenticatedAdminComplianceRoute: typeof AuthenticatedAdminComplianceRoute
+  AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
+  AuthenticatedAdminMessagingRoute: typeof AuthenticatedAdminMessagingRoute
+  AuthenticatedAdminPolicyRoute: typeof AuthenticatedAdminPolicyRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminWorkspacesWorkspaceIdRoute: typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
+  AuthenticatedAdminWorkspacesIndexRoute: typeof AuthenticatedAdminWorkspacesIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAppsRoute: AuthenticatedAdminAppsRoute,
+  AuthenticatedAdminComplianceRoute: AuthenticatedAdminComplianceRoute,
+  AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
+  AuthenticatedAdminMessagingRoute: AuthenticatedAdminMessagingRoute,
+  AuthenticatedAdminPolicyRoute: AuthenticatedAdminPolicyRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminWorkspacesWorkspaceIdRoute:
+    AuthenticatedAdminWorkspacesWorkspaceIdRoute,
+  AuthenticatedAdminWorkspacesIndexRoute:
+    AuthenticatedAdminWorkspacesIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedAuthorizeRoute: typeof AuthenticatedAuthorizeRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedAuthorizeRoute: AuthenticatedAuthorizeRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ApiPublicV1ContactsRoute: ApiPublicV1ContactsRoute,
+  ApiPublicV1MeRoute: ApiPublicV1MeRoute,
+  ApiPublicV1SuppressionsRoute: ApiPublicV1SuppressionsRoute,
+  ApiPublicV1WorkspacesRoute: ApiPublicV1WorkspacesRoute,
+  ApiPublicV1AuthRefreshRoute: ApiPublicV1AuthRefreshRoute,
+  ApiPublicV1AuthTokenRoute: ApiPublicV1AuthTokenRoute,
+  ApiPublicV1CreditsBalanceRoute: ApiPublicV1CreditsBalanceRoute,
+  ApiPublicV1CreditsConsumeRoute: ApiPublicV1CreditsConsumeRoute,
+  ApiPublicV1CreditsLedgerRoute: ApiPublicV1CreditsLedgerRoute,
+  ApiPublicV1CreditsRefundRoute: ApiPublicV1CreditsRefundRoute,
+  ApiPublicV1MessagesSendRoute: ApiPublicV1MessagesSendRoute,
+  ApiPublicV1PolicyAssertRoute: ApiPublicV1PolicyAssertRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
