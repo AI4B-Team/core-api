@@ -5,7 +5,7 @@ import { listMessages } from "@/lib/core/admin.functions";
 import { Empty, PageHeader, Panel, StatusTag, Td, Th, fmt } from "@/components/console/primitives";
 
 export const Route = createFileRoute("/_authenticated/admin/messaging")({
-  component: Messaging;
+  component: Messaging,
 });
 
 function Messaging() {
