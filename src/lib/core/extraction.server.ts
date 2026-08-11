@@ -102,7 +102,7 @@ async function runModel(utterances: Utterance[], fields: FieldSpec[]): Promise<M
     method: "POST",
     headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
     body: JSON.stringify({
-      model: "google/gemini-3-flash",
+      model: "google/gemini-3.6-flash",
       messages: [
         {
           role: "system",
