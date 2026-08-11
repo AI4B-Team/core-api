@@ -29,7 +29,7 @@ export function BrandMark({
   );
 }
 
-export function BrandFooter({ branding }: { branding?: CoreBranding | null }) {
+export function BrandFooter({ branding }: { branding?: CoreBranding | null | undefined }) {
   return (
     <p className="mono-label mt-10">
       secured by {(branding?.brandName ?? "Real Elite").toLowerCase()} core
