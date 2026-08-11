@@ -1,33 +1,40 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getAuthorizeContext, issueAuthCode } from "@/lib/core/authorize.functions";
+import { BrandFooter, BrandMark } from "@/components/console/auth-brand";
+import type { CoreBranding } from "@/lib/core/branding.functions";
 
 export const Route = createFileRoute("/_authenticated/authorize")({
   head: () => ({
     meta: [
-      { title: "Authorize app access — Core" },
-      { name: "description", content: "Grant a Real Elite application access to one of your Core workspaces." },
-      { property: "og:title", content: "Authorize app access — Core" },
-      { property: "og:description", content: "Choose the workspace an application may act inside." },
+      { title: "Choose a workspace — Real Elite" },
+      { name: "description", content: "Grant a Real Elite application access to one of your workspaces." },
+      { property: "og:title", content: "Choose a workspace — Real Elite" },
+      { property: "og:description", content: "Pick the workspace an application may act inside." },
     ],
   }),
   validateSearch: (search: Record<string, unknown>) => ({
     app_id: typeof search["app_id"] === "string" ? (search["app_id"] as string) : "",
     redirect_uri: typeof search["redirect_uri"] === "string" ? (search["redirect_uri"] as string) : "",
+    state: typeof search["state"] === "string" ? (search["state"] as string) : undefined,
   }),
   component: Authorize,
 });
 
 function Authorize() {
-  const { app_id, redirect_uri } = useSearch({ from: "/_authenticated/authorize" });
+  const { app_id, redirect_uri, state } = useSearch({ from: "/_authenticated/authorize" });
   const navigate = useNavigate();
   const fetchContext = useServerFn(getAuthorizeContext);
   const issue = useServerFn(issueAuthCode);
   const [selected, setSelected] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+  }, []);
 
   const { data, isLoading } = useQuery({
     queryKey: ["authorize", app_id],
@@ -35,49 +42,70 @@ function Authorize() {
     enabled: Boolean(app_id),
   });
 
+  const branding = (data?.branding ?? null) as CoreBranding | null;
+
   const grant = useMutation({
     mutationFn: (workspaceId: string) =>
       issue({ data: { appId: app_id, workspaceId, redirectUri: redirect_uri } }),
     onSuccess: (res) => {
-      window.location.href = res.redirectTo;
+      const url = new URL(res.redirectTo);
+      if (state) url.searchParams.set("state", state);
+      window.location.href = url.toString();
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "Authorization failed"),
   });
 
   if (!app_id || !redirect_uri) {
     return (
-      <Shell>
+      <Shell branding={branding}>
         <p className="text-sm text-destructive">Missing app_id or redirect_uri.</p>
       </Shell>
     );
   }
 
-  if (isLoading) return <Shell><p className="mono-label">loading…</p></Shell>;
+  if (isLoading)
+    return (
+      <Shell branding={branding}>
+        <p className="mono-label">loading…</p>
+      </Shell>
+    );
 
   if (!data?.app) {
     return (
-      <Shell>
+      <Shell branding={branding}>
         <p className="text-sm text-destructive">Unknown application “{app_id}”.</p>
       </Shell>
     );
   }
 
-  const target = new URL(redirect_uri);
+  let targetHost = redirect_uri;
+  try {
+    targetHost = new URL(redirect_uri).host;
+  } catch {
+    return (
+      <Shell branding={branding}>
+        <p className="text-sm text-destructive">Invalid redirect_uri.</p>
+      </Shell>
+    );
+  }
+
+  const workspaces = data.workspaces;
+  const entitledCount = workspaces.filter((w) => w.entitled).length;
 
   return (
-    <Shell>
-      <p className="mono-label">authorize</p>
-      <h1 className="mt-3 text-2xl font-semibold">{data.app.name} wants access to a workspace</h1>
+    <Shell branding={branding}>
+      <p className="mono-label">choose workspace</p>
+      <h1 className="mt-3 text-2xl font-semibold">Continue to {data.app.name}</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Core will issue a scoped token for the workspace you choose and return the user to{" "}
-        <span className="font-mono text-foreground">{target.host}</span>.
+        Pick the workspace {data.app.name} should work inside. You will be returned to{" "}
+        <span className="font-mono text-foreground">{targetHost}</span> with a single-use code.
       </p>
 
       <div className="mt-6 space-y-2">
-        {data.workspaces.length === 0 && (
+        {workspaces.length === 0 && (
           <p className="text-sm text-muted-foreground">You are not a member of any workspace yet.</p>
         )}
-        {data.workspaces.map((ws) => (
+        {workspaces.map((ws) => (
           <button
             key={ws.id}
             type="button"
@@ -90,6 +118,7 @@ function Authorize() {
             <span>
               <span className="block text-sm font-medium">{ws.name}</span>
               <span className="mono-label">
+                {ws.accountName ? `${ws.accountName} · ` : ""}
                 {ws.slug} · {ws.role}
               </span>
             </span>
@@ -98,26 +127,45 @@ function Authorize() {
         ))}
       </div>
 
+      {workspaces.length > 0 && entitledCount === 0 && (
+        <p className="mt-4 text-sm text-destructive">
+          None of your workspaces are entitled to {data.app.name}.
+        </p>
+      )}
+
       <div className="mt-8 flex gap-3">
         <Button
           className="font-mono"
           disabled={!selected || grant.isPending}
           onClick={() => selected && grant.mutate(selected)}
         >
-          {grant.isPending ? "issuing…" : "authorize"}
+          {grant.isPending ? "issuing…" : "continue"}
         </Button>
-        <Button variant="outline" className="font-mono" onClick={() => navigate({ to: "/admin" })}>
+        <Button variant="outline" className="font-mono" onClick={() => navigate({ to: "/" })}>
           cancel
         </Button>
       </div>
+
+      <BrandFooter branding={branding} />
     </Shell>
   );
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({
+  children,
+  branding,
+}: {
+  children: React.ReactNode;
+  branding: CoreBranding | null;
+}) {
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-16">
-      <div className="w-full max-w-md panel p-8">{children}</div>
+      <div className="panel w-full max-w-md p-8">
+        <div className="mb-6">
+          <BrandMark branding={branding} />
+        </div>
+        {children}
+      </div>
     </div>
   );
 }
