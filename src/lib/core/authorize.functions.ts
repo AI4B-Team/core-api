@@ -9,7 +9,7 @@ export const getAuthorizeContext = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: app } = await supabaseAdmin
       .from("apps")
-      .select("id, name, description, scopes")
+      .select("id, name, description, base_url, manifest")
       .eq("id", data.appId)
       .maybeSingle();
 
@@ -79,10 +79,11 @@ export const issueAuthCode = createServerFn({ method: "POST" })
 
     const { data: app } = await supabaseAdmin
       .from("apps")
-      .select("redirect_uris")
+      .select("manifest")
       .eq("id", data.appId)
       .maybeSingle();
-    const allowed = (app?.redirect_uris as string[] | null) ?? [];
+    const manifest = (app?.manifest ?? {}) as { redirect_uris?: string[] };
+    const allowed = manifest.redirect_uris ?? [];
     if (allowed.length && !allowed.includes(redirect.toString()))
       throw new Error("redirect_uri is not registered for this app");
 
