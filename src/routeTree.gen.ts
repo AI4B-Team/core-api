@@ -41,7 +41,10 @@ import { Route as ApiPublicV1KnowledgeSearchRouteImport } from './routes/api/pub
 import { Route as ApiPublicV1MessagesSendRouteImport } from './routes/api/public/v1/messages/send'
 import { Route as ApiPublicV1PolicyAssertRouteImport } from './routes/api/public/v1/policy/assert'
 import { Route as ApiPublicV1PolicyRecordRouteImport } from './routes/api/public/v1/policy/record'
+import { Route as ApiPublicV1CallsIdIndexRouteImport } from './routes/api/public/v1/calls/$id/index'
 import { Route as ApiPublicV1CallsIdAssistRouteImport } from './routes/api/public/v1/calls/$id/assist'
+import { Route as ApiPublicV1CallsIdParticipantsRouteImport } from './routes/api/public/v1/calls/$id/participants'
+import { Route as ApiPublicV1CallsIdTranscriptRouteImport } from './routes/api/public/v1/calls/$id/transcript'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -216,10 +219,27 @@ const ApiPublicV1PolicyRecordRoute = ApiPublicV1PolicyRecordRouteImport.update({
   path: '/api/public/v1/policy/record',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1CallsIdIndexRoute = ApiPublicV1CallsIdIndexRouteImport.update({
+  id: '/api/public/v1/calls/$id/',
+  path: '/api/public/v1/calls/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1CallsIdAssistRoute =
   ApiPublicV1CallsIdAssistRouteImport.update({
     id: '/api/public/v1/calls/$id/assist',
     path: '/api/public/v1/calls/$id/assist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CallsIdParticipantsRoute =
+  ApiPublicV1CallsIdParticipantsRouteImport.update({
+    id: '/api/public/v1/calls/$id/participants',
+    path: '/api/public/v1/calls/$id/participants',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CallsIdTranscriptRoute =
+  ApiPublicV1CallsIdTranscriptRouteImport.update({
+    id: '/api/public/v1/calls/$id/transcript',
+    path: '/api/public/v1/calls/$id/transcript',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -256,6 +276,9 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id/': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -289,6 +312,9 @@ export interface FileRoutesByTo {
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -325,6 +351,9 @@ export interface FileRoutesById {
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id/': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -361,6 +390,9 @@ export interface FileRouteTypes {
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls/'
     | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -394,6 +426,9 @@ export interface FileRouteTypes {
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls'
     | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id'
   id:
     | '__root__'
     | '/'
@@ -429,6 +464,9 @@ export interface FileRouteTypes {
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls/'
     | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -455,6 +493,9 @@ export interface RootRouteChildren {
   ApiPublicV1PolicyRecordRoute: typeof ApiPublicV1PolicyRecordRoute
   ApiPublicV1CallsIndexRoute: typeof ApiPublicV1CallsIndexRoute
   ApiPublicV1CallsIdAssistRoute: typeof ApiPublicV1CallsIdAssistRoute
+  ApiPublicV1CallsIdParticipantsRoute: typeof ApiPublicV1CallsIdParticipantsRoute
+  ApiPublicV1CallsIdTranscriptRoute: typeof ApiPublicV1CallsIdTranscriptRoute
+  ApiPublicV1CallsIdIndexRoute: typeof ApiPublicV1CallsIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -683,11 +724,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1PolicyRecordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/calls/$id/': {
+      id: '/api/public/v1/calls/$id/'
+      path: '/api/public/v1/calls/$id'
+      fullPath: '/api/public/v1/calls/$id/'
+      preLoaderRoute: typeof ApiPublicV1CallsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/calls/$id/assist': {
       id: '/api/public/v1/calls/$id/assist'
       path: '/api/public/v1/calls/$id/assist'
       fullPath: '/api/public/v1/calls/$id/assist'
       preLoaderRoute: typeof ApiPublicV1CallsIdAssistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/participants': {
+      id: '/api/public/v1/calls/$id/participants'
+      path: '/api/public/v1/calls/$id/participants'
+      fullPath: '/api/public/v1/calls/$id/participants'
+      preLoaderRoute: typeof ApiPublicV1CallsIdParticipantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/transcript': {
+      id: '/api/public/v1/calls/$id/transcript'
+      path: '/api/public/v1/calls/$id/transcript'
+      fullPath: '/api/public/v1/calls/$id/transcript'
+      preLoaderRoute: typeof ApiPublicV1CallsIdTranscriptRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -757,17 +819,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1PolicyRecordRoute: ApiPublicV1PolicyRecordRoute,
   ApiPublicV1CallsIndexRoute: ApiPublicV1CallsIndexRoute,
   ApiPublicV1CallsIdAssistRoute: ApiPublicV1CallsIdAssistRoute,
+  ApiPublicV1CallsIdParticipantsRoute: ApiPublicV1CallsIdParticipantsRoute,
+  ApiPublicV1CallsIdTranscriptRoute: ApiPublicV1CallsIdTranscriptRoute,
+  ApiPublicV1CallsIdIndexRoute: ApiPublicV1CallsIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
