@@ -32,3 +32,30 @@ export async function sendViaProvider(_req: SendRequest): Promise<SendResult> {
   // Real Twilio/Telnyx transport is wired here once credentials exist.
   return { ok: false, error: "provider_not_configured", errorCode: "no_provider" };
 }
+
+/* ---------------------------------------------------------------- voice --- */
+
+export interface CallRequest {
+  from: string;
+  to: string;
+  record: boolean;
+  announce: boolean;
+}
+
+export type CallResult =
+  | { ok: true; providerCallId: string; status: "ringing" }
+  | { ok: false; error: "provider_not_configured"; errorCode: "no_provider" };
+
+/** Voice reuses the same credential gate as messaging — one stub path only. */
+export function voiceProviderConfigured(): boolean {
+  return providerConfigured();
+}
+
+export async function placeCallViaProvider(_req: CallRequest): Promise<CallResult> {
+  if (!voiceProviderConfigured()) {
+    return { ok: false, error: "provider_not_configured", errorCode: "no_provider" };
+  }
+  // Real carrier voice transport is wired here once credentials exist.
+  return { ok: false, error: "provider_not_configured", errorCode: "no_provider" };
+}
+

@@ -196,6 +196,101 @@ export type Database = {
         }
         Relationships: []
       }
+      assist_events: {
+        Row: {
+          acted_on: boolean
+          call_session_id: string
+          created_at: string
+          id: string
+          knowledge_chunk_ids: string[]
+          latency_ms: number | null
+          suggestion: string
+          suggestion_type: string
+          surfaced: boolean
+          trigger_text: string | null
+          workspace_id: string
+        }
+        Insert: {
+          acted_on?: boolean
+          call_session_id: string
+          created_at?: string
+          id?: string
+          knowledge_chunk_ids?: string[]
+          latency_ms?: number | null
+          suggestion: string
+          suggestion_type: string
+          surfaced?: boolean
+          trigger_text?: string | null
+          workspace_id: string
+        }
+        Update: {
+          acted_on?: boolean
+          call_session_id?: string
+          created_at?: string
+          id?: string
+          knowledge_chunk_ids?: string[]
+          latency_ms?: number | null
+          suggestion?: string
+          suggestion_type?: string
+          surfaced?: boolean
+          trigger_text?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assist_events_call_session_id_fkey"
+            columns: ["call_session_id"]
+            isOneToOne: false
+            referencedRelation: "call_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assist_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assist_playbooks: {
+        Row: {
+          created_at: string
+          id: string
+          industry: string | null
+          is_active: boolean
+          triggers: Json
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          triggers?: Json
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          triggers?: Json
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assist_playbooks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       auth_codes: {
         Row: {
           app_id: string
@@ -297,6 +392,195 @@ export type Database = {
             columns: ["legal_entity_id"]
             isOneToOne: true
             referencedRelation: "legal_entities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_participants: {
+        Row: {
+          call_session_id: string
+          external_e164: string | null
+          id: string
+          joined_at: string
+          left_at: string | null
+          role: string
+          user_id: string | null
+          workspace_id: string
+        }
+        Insert: {
+          call_session_id: string
+          external_e164?: string | null
+          id?: string
+          joined_at?: string
+          left_at?: string | null
+          role: string
+          user_id?: string | null
+          workspace_id: string
+        }
+        Update: {
+          call_session_id?: string
+          external_e164?: string | null
+          id?: string
+          joined_at?: string
+          left_at?: string | null
+          role?: string
+          user_id?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_participants_call_session_id_fkey"
+            columns: ["call_session_id"]
+            isOneToOne: false
+            referencedRelation: "call_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_participants_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_sessions: {
+        Row: {
+          answered_at: string | null
+          conversation_id: string | null
+          created_at: string
+          direction: string
+          disposition: string | null
+          ended_at: string | null
+          from_e164: string
+          id: string
+          message_id: string | null
+          policy_check_id: string | null
+          provider: string | null
+          provider_call_id: string | null
+          recorded: boolean
+          started_at: string | null
+          status: string
+          to_e164: string
+          workspace_id: string
+        }
+        Insert: {
+          answered_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          direction: string
+          disposition?: string | null
+          ended_at?: string | null
+          from_e164: string
+          id?: string
+          message_id?: string | null
+          policy_check_id?: string | null
+          provider?: string | null
+          provider_call_id?: string | null
+          recorded?: boolean
+          started_at?: string | null
+          status: string
+          to_e164: string
+          workspace_id: string
+        }
+        Update: {
+          answered_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          direction?: string
+          disposition?: string | null
+          ended_at?: string | null
+          from_e164?: string
+          id?: string
+          message_id?: string | null
+          policy_check_id?: string | null
+          provider?: string | null
+          provider_call_id?: string | null
+          recorded?: boolean
+          started_at?: string | null
+          status?: string
+          to_e164?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_sessions_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sessions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sessions_policy_check_id_fkey"
+            columns: ["policy_check_id"]
+            isOneToOne: false
+            referencedRelation: "policy_checks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sessions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_transcripts: {
+        Row: {
+          call_session_id: string
+          created_at: string
+          full_text: string | null
+          id: string
+          provider: string | null
+          segments: Json
+          workspace_id: string
+        }
+        Insert: {
+          call_session_id: string
+          created_at?: string
+          full_text?: string | null
+          id?: string
+          provider?: string | null
+          segments?: Json
+          workspace_id: string
+        }
+        Update: {
+          call_session_id?: string
+          created_at?: string
+          full_text?: string | null
+          id?: string
+          provider?: string | null
+          segments?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_transcripts_call_session_id_fkey"
+            columns: ["call_session_id"]
+            isOneToOne: false
+            referencedRelation: "call_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_transcripts_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -793,6 +1077,162 @@ export type Database = {
           },
         ]
       }
+      extraction_results: {
+        Row: {
+          confidence: Json
+          created_at: string
+          fields: Json
+          id: string
+          proposed_disposition: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          schema_id: string | null
+          source_id: string
+          source_type: string
+          summary: string | null
+          workspace_id: string
+        }
+        Insert: {
+          confidence?: Json
+          created_at?: string
+          fields?: Json
+          id?: string
+          proposed_disposition?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          schema_id?: string | null
+          source_id: string
+          source_type: string
+          summary?: string | null
+          workspace_id: string
+        }
+        Update: {
+          confidence?: Json
+          created_at?: string
+          fields?: Json
+          id?: string
+          proposed_disposition?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          schema_id?: string | null
+          source_id?: string
+          source_type?: string
+          summary?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extraction_results_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "extraction_results_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string
+          embedding: string | null
+          id: string
+          workspace_id: string
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          created_at?: string
+          document_id: string
+          embedding?: string | null
+          id?: string
+          workspace_id: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string
+          embedding?: string | null
+          id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_chunks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_documents: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          file_path: string | null
+          id: string
+          mime_type: string | null
+          source_type: string
+          status: string
+          title: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          mime_type?: string | null
+          source_type: string
+          status?: string
+          title: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          mime_type?: string | null
+          source_type?: string
+          status?: string
+          title?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_documents_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_documents_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       legal_entities: {
         Row: {
           account_id: string
@@ -878,16 +1318,20 @@ export type Database = {
           conversation_id: string
           created_at: string
           direction: string
+          duration_seconds: number | null
           error_code: string | null
           from_identifier: string
           id: string
           media: Json | null
           policy_check_id: string | null
           provider_message_id: string | null
+          recording_consent_state: string | null
+          recording_url: string | null
           segments: number | null
           sent_at: string | null
           status: string
           to_identifier: string
+          transcript_id: string | null
           workspace_id: string
         }
         Insert: {
@@ -897,16 +1341,20 @@ export type Database = {
           conversation_id: string
           created_at?: string
           direction: string
+          duration_seconds?: number | null
           error_code?: string | null
           from_identifier: string
           id?: string
           media?: Json | null
           policy_check_id?: string | null
           provider_message_id?: string | null
+          recording_consent_state?: string | null
+          recording_url?: string | null
           segments?: number | null
           sent_at?: string | null
           status: string
           to_identifier: string
+          transcript_id?: string | null
           workspace_id: string
         }
         Update: {
@@ -916,16 +1364,20 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           direction?: string
+          duration_seconds?: number | null
           error_code?: string | null
           from_identifier?: string
           id?: string
           media?: Json | null
           policy_check_id?: string | null
           provider_message_id?: string | null
+          recording_consent_state?: string | null
+          recording_url?: string | null
           segments?: number | null
           sent_at?: string | null
           status?: string
           to_identifier?: string
+          transcript_id?: string | null
           workspace_id?: string
         }
         Relationships: [
@@ -1114,6 +1566,36 @@ export type Database = {
           industry?: string | null
           name?: string
           rules?: Json
+        }
+        Relationships: []
+      }
+      recording_consent_rules: {
+        Row: {
+          consent_type: string
+          notes: string | null
+          source_url: string | null
+          state: string
+          statute_citation: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          consent_type: string
+          notes?: string | null
+          source_url?: string | null
+          state: string
+          statute_citation?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          consent_type?: string
+          notes?: string | null
+          source_url?: string | null
+          state?: string
+          statute_citation?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: []
       }
@@ -1471,6 +1953,16 @@ export type Database = {
       has_entity_access: { Args: { _le: string }; Returns: boolean }
       has_workspace_access: { Args: { _ws: string }; Returns: boolean }
       is_staff: { Args: { _uid: string }; Returns: boolean }
+      match_knowledge_chunks: {
+        Args: { _embedding: string; _limit?: number; _workspace_id: string }
+        Returns: {
+          chunk_index: number
+          content: string
+          document_id: string
+          id: string
+          similarity: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
