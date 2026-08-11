@@ -62,7 +62,12 @@ function AuthScreen() {
   const { data: branding } = useQuery({
     queryKey: ["auth-branding", appId ?? null, search.account ?? null],
     queryFn: () =>
-      brandFn({ data: { appId: appId ?? undefined, accountId: search.account ?? undefined } }),
+      brandFn({
+        data: {
+          ...(appId ? { appId } : {}),
+          ...(search.account ? { accountId: search.account } : {}),
+        },
+      }),
   });
 
   useEffect(() => {

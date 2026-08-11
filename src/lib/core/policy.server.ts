@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { stateFromE164 } from "./nanp";
 
-export type PolicyAction = "send" | "call" | "offer" | "negotiate" | "sign";
+export type PolicyAction = "send" | "call" | "offer" | "negotiate" | "sign" | "record";
 export type ActorType = "user" | "ai" | "automation";
 
 export interface PolicyInput {
@@ -21,11 +22,17 @@ export interface RuleResult {
 }
 
 export interface PolicyDecision {
-  decision: "allow" | "deny";
+  decision: "allow" | "allow_with_announcement" | "deny";
   policy_check_id: string;
   denied_by?: string | undefined;
   reason?: string | undefined;
   rules_evaluated: RuleResult[];
+}
+
+export interface RecordingDecision extends PolicyDecision {
+  consent_type: "one_party" | "all_party" | "unknown";
+  requires_announcement: boolean;
+  called_state: string | null;
 }
 
 interface PackRules {
@@ -269,5 +276,120 @@ export async function assertPolicy(
     policy_check_id: check.id as string,
     ...(deniedBy ? { denied_by: deniedBy, reason } : {}),
     rules_evaluated: rules,
+  };
+}
+
+/**
+ * Recording consent chokepoint.
+ *
+ * The jurisdiction that matters is the CALLED party's, not the caller's. When
+ * that jurisdiction is all-party, unknown, or not yet human-verified, the
+ * decision is `allow_with_announcement` — never a plain allow. Fail toward
+ * announcing. Supervisor monitor/whisper/barge legs are subject to this too.
+ */
+export async function assertCanRecord(
+  db: SupabaseClient,
+  input: Omit<PolicyInput, "action" | "channel"> & { calledE164: string },
+): Promise<RecordingDecision> {
+  const rules: RuleResult[] = [];
+  let deniedBy: string | undefined;
+  let reason: string | undefined;
+
+  const { data: workspace } = await db
+    .from("workspaces")
+    .select("id, legal_entity_id")
+    .eq("id", input.workspaceId)
+    .maybeSingle();
+  if (!workspace) throw new Error("workspace_not_found");
+  const legalEntityId = workspace.legal_entity_id as string;
+
+  // Suppression still applies to the recorded party.
+  const { data: hit } = await db
+    .from("suppressions")
+    .select("id, reason")
+    .eq("legal_entity_id", legalEntityId)
+    .eq("identifier", input.calledE164)
+    .in("channel", ["voice", "all"])
+    .maybeSingle();
+  if (hit) {
+    rules.push({ rule: "suppression", result: "deny", detail: `Suppressed (${hit.reason})` });
+    deniedBy = "suppression";
+    reason = `Suppressed for this entity (${hit.reason})`;
+  } else {
+    rules.push({ rule: "suppression", result: "pass" });
+  }
+
+  const state = stateFromE164(input.calledE164);
+  let consentType: "one_party" | "all_party" | "unknown" = "unknown";
+  let requiresAnnouncement = true;
+
+  if (!deniedBy) {
+    if (!state) {
+      rules.push({
+        rule: "recording_consent",
+        result: "pass",
+        detail: "called party jurisdiction undeterminable — announcement required",
+      });
+    } else {
+      const { data: rule } = await db
+        .from("recording_consent_rules")
+        .select("state, consent_type, statute_citation, verified_at")
+        .eq("state", state)
+        .maybeSingle();
+      if (!rule) {
+        rules.push({
+          rule: "recording_consent",
+          result: "pass",
+          detail: `no consent rule on file for ${state} — announcement required`,
+        });
+      } else {
+        consentType = rule.consent_type as "one_party" | "all_party";
+        const verified = Boolean(rule.verified_at);
+        requiresAnnouncement = consentType === "all_party" || !verified;
+        rules.push({
+          rule: "recording_consent",
+          result: "pass",
+          detail: `${state} ${consentType}${verified ? " (verified)" : " (unverified)"}${
+            rule.statute_citation ? ` ${rule.statute_citation}` : ""
+          }`,
+        });
+      }
+    }
+  }
+
+  const decision: RecordingDecision["decision"] = deniedBy
+    ? "deny"
+    : requiresAnnouncement
+      ? "allow_with_announcement"
+      : "allow";
+
+  const { data: check, error } = await db
+    .from("policy_checks")
+    .insert({
+      workspace_id: input.workspaceId,
+      legal_entity_id: legalEntityId,
+      app_id: input.appId,
+      action: "record",
+      channel: "voice",
+      identifier: input.calledE164,
+      contact_id: input.contactId ?? null,
+      decision,
+      rules_evaluated: rules,
+      denied_by: deniedBy ?? null,
+      actor_type: input.actorType,
+      actor_id: input.actorId ?? null,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error(`policy_check_persist_failed: ${error.message}`);
+
+  return {
+    decision,
+    policy_check_id: check.id as string,
+    ...(deniedBy ? { denied_by: deniedBy, reason } : {}),
+    rules_evaluated: rules,
+    consent_type: consentType,
+    requires_announcement: deniedBy ? false : requiresAnnouncement,
+    called_state: state,
   };
 }

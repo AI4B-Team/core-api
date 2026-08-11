@@ -63,7 +63,11 @@ function Index() {
             <span className="mono-label hidden sm:inline">realelite platform</span>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="/auth" className="mono-label hover:text-foreground">
+            <Link
+              to="/auth"
+              search={{ redirect: undefined, app_id: undefined, account: undefined }}
+              className="mono-label hover:text-foreground"
+            >
               sign in
             </Link>
             <Link

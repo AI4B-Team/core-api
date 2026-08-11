@@ -26,14 +26,25 @@ import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
 import { Route as ApiPublicV1SuppressionsRouteImport } from './routes/api/public/v1/suppressions'
 import { Route as ApiPublicV1WorkspacesRouteImport } from './routes/api/public/v1/workspaces'
+import { Route as ApiPublicV1AssistPlaybooksRouteImport } from './routes/api/public/v1/assist/playbooks'
 import { Route as ApiPublicV1AuthRefreshRouteImport } from './routes/api/public/v1/auth/refresh'
 import { Route as ApiPublicV1AuthTokenRouteImport } from './routes/api/public/v1/auth/token'
+import { Route as ApiPublicV1CallsIndexRouteImport } from './routes/api/public/v1/calls/index'
 import { Route as ApiPublicV1CreditsBalanceRouteImport } from './routes/api/public/v1/credits/balance'
 import { Route as ApiPublicV1CreditsConsumeRouteImport } from './routes/api/public/v1/credits/consume'
 import { Route as ApiPublicV1CreditsLedgerRouteImport } from './routes/api/public/v1/credits/ledger'
 import { Route as ApiPublicV1CreditsRefundRouteImport } from './routes/api/public/v1/credits/refund'
+import { Route as ApiPublicV1ExtractionIdRouteImport } from './routes/api/public/v1/extraction/$id'
+import { Route as ApiPublicV1ExtractionRunRouteImport } from './routes/api/public/v1/extraction/run'
+import { Route as ApiPublicV1KnowledgeDocumentsRouteImport } from './routes/api/public/v1/knowledge/documents'
+import { Route as ApiPublicV1KnowledgeSearchRouteImport } from './routes/api/public/v1/knowledge/search'
 import { Route as ApiPublicV1MessagesSendRouteImport } from './routes/api/public/v1/messages/send'
 import { Route as ApiPublicV1PolicyAssertRouteImport } from './routes/api/public/v1/policy/assert'
+import { Route as ApiPublicV1PolicyRecordRouteImport } from './routes/api/public/v1/policy/record'
+import { Route as ApiPublicV1CallsIdIndexRouteImport } from './routes/api/public/v1/calls/$id/index'
+import { Route as ApiPublicV1CallsIdAssistRouteImport } from './routes/api/public/v1/calls/$id/assist'
+import { Route as ApiPublicV1CallsIdParticipantsRouteImport } from './routes/api/public/v1/calls/$id/participants'
+import { Route as ApiPublicV1CallsIdTranscriptRouteImport } from './routes/api/public/v1/calls/$id/transcript'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -125,6 +136,12 @@ const ApiPublicV1WorkspacesRoute = ApiPublicV1WorkspacesRouteImport.update({
   path: '/api/public/v1/workspaces',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1AssistPlaybooksRoute =
+  ApiPublicV1AssistPlaybooksRouteImport.update({
+    id: '/api/public/v1/assist/playbooks',
+    path: '/api/public/v1/assist/playbooks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1AuthRefreshRoute = ApiPublicV1AuthRefreshRouteImport.update({
   id: '/api/public/v1/auth/refresh',
   path: '/api/public/v1/auth/refresh',
@@ -133,6 +150,11 @@ const ApiPublicV1AuthRefreshRoute = ApiPublicV1AuthRefreshRouteImport.update({
 const ApiPublicV1AuthTokenRoute = ApiPublicV1AuthTokenRouteImport.update({
   id: '/api/public/v1/auth/token',
   path: '/api/public/v1/auth/token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CallsIndexRoute = ApiPublicV1CallsIndexRouteImport.update({
+  id: '/api/public/v1/calls/',
+  path: '/api/public/v1/calls/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1CreditsBalanceRoute =
@@ -159,6 +181,29 @@ const ApiPublicV1CreditsRefundRoute =
     path: '/api/public/v1/credits/refund',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1ExtractionIdRoute = ApiPublicV1ExtractionIdRouteImport.update({
+  id: '/api/public/v1/extraction/$id',
+  path: '/api/public/v1/extraction/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1ExtractionRunRoute =
+  ApiPublicV1ExtractionRunRouteImport.update({
+    id: '/api/public/v1/extraction/run',
+    path: '/api/public/v1/extraction/run',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1KnowledgeDocumentsRoute =
+  ApiPublicV1KnowledgeDocumentsRouteImport.update({
+    id: '/api/public/v1/knowledge/documents',
+    path: '/api/public/v1/knowledge/documents',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1KnowledgeSearchRoute =
+  ApiPublicV1KnowledgeSearchRouteImport.update({
+    id: '/api/public/v1/knowledge/search',
+    path: '/api/public/v1/knowledge/search',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1MessagesSendRoute = ApiPublicV1MessagesSendRouteImport.update({
   id: '/api/public/v1/messages/send',
   path: '/api/public/v1/messages/send',
@@ -169,6 +214,34 @@ const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
   path: '/api/public/v1/policy/assert',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1PolicyRecordRoute = ApiPublicV1PolicyRecordRouteImport.update({
+  id: '/api/public/v1/policy/record',
+  path: '/api/public/v1/policy/record',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CallsIdIndexRoute = ApiPublicV1CallsIdIndexRouteImport.update({
+  id: '/api/public/v1/calls/$id/',
+  path: '/api/public/v1/calls/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CallsIdAssistRoute =
+  ApiPublicV1CallsIdAssistRouteImport.update({
+    id: '/api/public/v1/calls/$id/assist',
+    path: '/api/public/v1/calls/$id/assist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CallsIdParticipantsRoute =
+  ApiPublicV1CallsIdParticipantsRouteImport.update({
+    id: '/api/public/v1/calls/$id/participants',
+    path: '/api/public/v1/calls/$id/participants',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CallsIdTranscriptRoute =
+  ApiPublicV1CallsIdTranscriptRouteImport.update({
+    id: '/api/public/v1/calls/$id/transcript',
+    path: '/api/public/v1/calls/$id/transcript',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -187,14 +260,25 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
   '/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/assist/playbooks': typeof ApiPublicV1AssistPlaybooksRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
   '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
   '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
   '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/extraction/$id': typeof ApiPublicV1ExtractionIdRoute
+  '/api/public/v1/extraction/run': typeof ApiPublicV1ExtractionRunRoute
+  '/api/public/v1/knowledge/documents': typeof ApiPublicV1KnowledgeDocumentsRoute
+  '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
+  '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
+  '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id/': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -212,14 +296,25 @@ export interface FileRoutesByTo {
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
   '/admin/workspaces': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/assist/playbooks': typeof ApiPublicV1AssistPlaybooksRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
   '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
   '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
   '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/extraction/$id': typeof ApiPublicV1ExtractionIdRoute
+  '/api/public/v1/extraction/run': typeof ApiPublicV1ExtractionRunRoute
+  '/api/public/v1/knowledge/documents': typeof ApiPublicV1KnowledgeDocumentsRoute
+  '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
+  '/api/public/v1/calls': typeof ApiPublicV1CallsIndexRoute
+  '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -240,14 +335,25 @@ export interface FileRoutesById {
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
   '/_authenticated/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
+  '/api/public/v1/assist/playbooks': typeof ApiPublicV1AssistPlaybooksRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
   '/api/public/v1/credits/consume': typeof ApiPublicV1CreditsConsumeRoute
   '/api/public/v1/credits/ledger': typeof ApiPublicV1CreditsLedgerRoute
   '/api/public/v1/credits/refund': typeof ApiPublicV1CreditsRefundRoute
+  '/api/public/v1/extraction/$id': typeof ApiPublicV1ExtractionIdRoute
+  '/api/public/v1/extraction/run': typeof ApiPublicV1ExtractionRunRoute
+  '/api/public/v1/knowledge/documents': typeof ApiPublicV1KnowledgeDocumentsRoute
+  '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
+  '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
+  '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
+  '/api/public/v1/calls/$id/participants': typeof ApiPublicV1CallsIdParticipantsRoute
+  '/api/public/v1/calls/$id/transcript': typeof ApiPublicV1CallsIdTranscriptRoute
+  '/api/public/v1/calls/$id/': typeof ApiPublicV1CallsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -268,14 +374,25 @@ export interface FileRouteTypes {
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
     | '/admin/workspaces/'
+    | '/api/public/v1/assist/playbooks'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
     | '/api/public/v1/credits/consume'
     | '/api/public/v1/credits/ledger'
     | '/api/public/v1/credits/refund'
+    | '/api/public/v1/extraction/$id'
+    | '/api/public/v1/extraction/run'
+    | '/api/public/v1/knowledge/documents'
+    | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/record'
+    | '/api/public/v1/calls/'
+    | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -293,14 +410,25 @@ export interface FileRouteTypes {
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
     | '/admin/workspaces'
+    | '/api/public/v1/assist/playbooks'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
     | '/api/public/v1/credits/consume'
     | '/api/public/v1/credits/ledger'
     | '/api/public/v1/credits/refund'
+    | '/api/public/v1/extraction/$id'
+    | '/api/public/v1/extraction/run'
+    | '/api/public/v1/knowledge/documents'
+    | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/record'
+    | '/api/public/v1/calls'
+    | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id'
   id:
     | '__root__'
     | '/'
@@ -320,14 +448,25 @@ export interface FileRouteTypes {
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
     | '/_authenticated/admin/workspaces/'
+    | '/api/public/v1/assist/playbooks'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
     | '/api/public/v1/credits/consume'
     | '/api/public/v1/credits/ledger'
     | '/api/public/v1/credits/refund'
+    | '/api/public/v1/extraction/$id'
+    | '/api/public/v1/extraction/run'
+    | '/api/public/v1/knowledge/documents'
+    | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/record'
+    | '/api/public/v1/calls/'
+    | '/api/public/v1/calls/$id/assist'
+    | '/api/public/v1/calls/$id/participants'
+    | '/api/public/v1/calls/$id/transcript'
+    | '/api/public/v1/calls/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -338,14 +477,25 @@ export interface RootRouteChildren {
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
   ApiPublicV1SuppressionsRoute: typeof ApiPublicV1SuppressionsRoute
   ApiPublicV1WorkspacesRoute: typeof ApiPublicV1WorkspacesRoute
+  ApiPublicV1AssistPlaybooksRoute: typeof ApiPublicV1AssistPlaybooksRoute
   ApiPublicV1AuthRefreshRoute: typeof ApiPublicV1AuthRefreshRoute
   ApiPublicV1AuthTokenRoute: typeof ApiPublicV1AuthTokenRoute
   ApiPublicV1CreditsBalanceRoute: typeof ApiPublicV1CreditsBalanceRoute
   ApiPublicV1CreditsConsumeRoute: typeof ApiPublicV1CreditsConsumeRoute
   ApiPublicV1CreditsLedgerRoute: typeof ApiPublicV1CreditsLedgerRoute
   ApiPublicV1CreditsRefundRoute: typeof ApiPublicV1CreditsRefundRoute
+  ApiPublicV1ExtractionIdRoute: typeof ApiPublicV1ExtractionIdRoute
+  ApiPublicV1ExtractionRunRoute: typeof ApiPublicV1ExtractionRunRoute
+  ApiPublicV1KnowledgeDocumentsRoute: typeof ApiPublicV1KnowledgeDocumentsRoute
+  ApiPublicV1KnowledgeSearchRoute: typeof ApiPublicV1KnowledgeSearchRoute
   ApiPublicV1MessagesSendRoute: typeof ApiPublicV1MessagesSendRoute
   ApiPublicV1PolicyAssertRoute: typeof ApiPublicV1PolicyAssertRoute
+  ApiPublicV1PolicyRecordRoute: typeof ApiPublicV1PolicyRecordRoute
+  ApiPublicV1CallsIndexRoute: typeof ApiPublicV1CallsIndexRoute
+  ApiPublicV1CallsIdAssistRoute: typeof ApiPublicV1CallsIdAssistRoute
+  ApiPublicV1CallsIdParticipantsRoute: typeof ApiPublicV1CallsIdParticipantsRoute
+  ApiPublicV1CallsIdTranscriptRoute: typeof ApiPublicV1CallsIdTranscriptRoute
+  ApiPublicV1CallsIdIndexRoute: typeof ApiPublicV1CallsIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -469,6 +619,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1WorkspacesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/assist/playbooks': {
+      id: '/api/public/v1/assist/playbooks'
+      path: '/api/public/v1/assist/playbooks'
+      fullPath: '/api/public/v1/assist/playbooks'
+      preLoaderRoute: typeof ApiPublicV1AssistPlaybooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/auth/refresh': {
       id: '/api/public/v1/auth/refresh'
       path: '/api/public/v1/auth/refresh'
@@ -481,6 +638,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/auth/token'
       fullPath: '/api/public/v1/auth/token'
       preLoaderRoute: typeof ApiPublicV1AuthTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/': {
+      id: '/api/public/v1/calls/'
+      path: '/api/public/v1/calls'
+      fullPath: '/api/public/v1/calls/'
+      preLoaderRoute: typeof ApiPublicV1CallsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/credits/balance': {
@@ -511,6 +675,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1CreditsRefundRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/extraction/$id': {
+      id: '/api/public/v1/extraction/$id'
+      path: '/api/public/v1/extraction/$id'
+      fullPath: '/api/public/v1/extraction/$id'
+      preLoaderRoute: typeof ApiPublicV1ExtractionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/extraction/run': {
+      id: '/api/public/v1/extraction/run'
+      path: '/api/public/v1/extraction/run'
+      fullPath: '/api/public/v1/extraction/run'
+      preLoaderRoute: typeof ApiPublicV1ExtractionRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/knowledge/documents': {
+      id: '/api/public/v1/knowledge/documents'
+      path: '/api/public/v1/knowledge/documents'
+      fullPath: '/api/public/v1/knowledge/documents'
+      preLoaderRoute: typeof ApiPublicV1KnowledgeDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/knowledge/search': {
+      id: '/api/public/v1/knowledge/search'
+      path: '/api/public/v1/knowledge/search'
+      fullPath: '/api/public/v1/knowledge/search'
+      preLoaderRoute: typeof ApiPublicV1KnowledgeSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/messages/send': {
       id: '/api/public/v1/messages/send'
       path: '/api/public/v1/messages/send'
@@ -523,6 +715,41 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/policy/assert'
       fullPath: '/api/public/v1/policy/assert'
       preLoaderRoute: typeof ApiPublicV1PolicyAssertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policy/record': {
+      id: '/api/public/v1/policy/record'
+      path: '/api/public/v1/policy/record'
+      fullPath: '/api/public/v1/policy/record'
+      preLoaderRoute: typeof ApiPublicV1PolicyRecordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/': {
+      id: '/api/public/v1/calls/$id/'
+      path: '/api/public/v1/calls/$id'
+      fullPath: '/api/public/v1/calls/$id/'
+      preLoaderRoute: typeof ApiPublicV1CallsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/assist': {
+      id: '/api/public/v1/calls/$id/assist'
+      path: '/api/public/v1/calls/$id/assist'
+      fullPath: '/api/public/v1/calls/$id/assist'
+      preLoaderRoute: typeof ApiPublicV1CallsIdAssistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/participants': {
+      id: '/api/public/v1/calls/$id/participants'
+      path: '/api/public/v1/calls/$id/participants'
+      fullPath: '/api/public/v1/calls/$id/participants'
+      preLoaderRoute: typeof ApiPublicV1CallsIdParticipantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/calls/$id/transcript': {
+      id: '/api/public/v1/calls/$id/transcript'
+      path: '/api/public/v1/calls/$id/transcript'
+      fullPath: '/api/public/v1/calls/$id/transcript'
+      preLoaderRoute: typeof ApiPublicV1CallsIdTranscriptRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -576,14 +803,25 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
   ApiPublicV1SuppressionsRoute: ApiPublicV1SuppressionsRoute,
   ApiPublicV1WorkspacesRoute: ApiPublicV1WorkspacesRoute,
+  ApiPublicV1AssistPlaybooksRoute: ApiPublicV1AssistPlaybooksRoute,
   ApiPublicV1AuthRefreshRoute: ApiPublicV1AuthRefreshRoute,
   ApiPublicV1AuthTokenRoute: ApiPublicV1AuthTokenRoute,
   ApiPublicV1CreditsBalanceRoute: ApiPublicV1CreditsBalanceRoute,
   ApiPublicV1CreditsConsumeRoute: ApiPublicV1CreditsConsumeRoute,
   ApiPublicV1CreditsLedgerRoute: ApiPublicV1CreditsLedgerRoute,
   ApiPublicV1CreditsRefundRoute: ApiPublicV1CreditsRefundRoute,
+  ApiPublicV1ExtractionIdRoute: ApiPublicV1ExtractionIdRoute,
+  ApiPublicV1ExtractionRunRoute: ApiPublicV1ExtractionRunRoute,
+  ApiPublicV1KnowledgeDocumentsRoute: ApiPublicV1KnowledgeDocumentsRoute,
+  ApiPublicV1KnowledgeSearchRoute: ApiPublicV1KnowledgeSearchRoute,
   ApiPublicV1MessagesSendRoute: ApiPublicV1MessagesSendRoute,
   ApiPublicV1PolicyAssertRoute: ApiPublicV1PolicyAssertRoute,
+  ApiPublicV1PolicyRecordRoute: ApiPublicV1PolicyRecordRoute,
+  ApiPublicV1CallsIndexRoute: ApiPublicV1CallsIndexRoute,
+  ApiPublicV1CallsIdAssistRoute: ApiPublicV1CallsIdAssistRoute,
+  ApiPublicV1CallsIdParticipantsRoute: ApiPublicV1CallsIdParticipantsRoute,
+  ApiPublicV1CallsIdTranscriptRoute: ApiPublicV1CallsIdTranscriptRoute,
+  ApiPublicV1CallsIdIndexRoute: ApiPublicV1CallsIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
