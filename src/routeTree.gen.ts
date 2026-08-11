@@ -14,6 +14,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAuthorizeRouteImport } from './routes/_authenticated/authorize'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminAppsRouteImport } from './routes/_authenticated/admin/apps'
+import { Route as AuthenticatedAdminWorkspacesIndexRouteImport } from './routes/_authenticated/admin/workspaces/index'
+import { Route as AuthenticatedAdminWorkspacesWorkspaceIdRouteImport } from './routes/_authenticated/admin/workspaces/$workspaceId'
 import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/contacts'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
 import { Route as ApiPublicV1SuppressionsRouteImport } from './routes/api/public/v1/suppressions'
@@ -51,6 +55,28 @@ const AuthenticatedAuthorizeRoute = AuthenticatedAuthorizeRouteImport.update({
   path: '/authorize',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAppsRoute = AuthenticatedAdminAppsRouteImport.update({
+  id: '/apps',
+  path: '/apps',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminWorkspacesIndexRoute =
+  AuthenticatedAdminWorkspacesIndexRouteImport.update({
+    id: '/workspaces/',
+    path: '/workspaces/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminWorkspacesWorkspaceIdRoute =
+  AuthenticatedAdminWorkspacesWorkspaceIdRouteImport.update({
+    id: '/workspaces/$workspaceId',
+    path: '/workspaces/$workspaceId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const ApiPublicV1ContactsRoute = ApiPublicV1ContactsRouteImport.update({
   id: '/api/public/v1/contacts',
   path: '/api/public/v1/contacts',
@@ -119,12 +145,16 @@ const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/authorize': typeof AuthenticatedAuthorizeRoute
+  '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
@@ -137,12 +167,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/authorize': typeof AuthenticatedAuthorizeRoute
+  '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/admin/workspaces': typeof AuthenticatedAdminWorkspacesIndexRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
@@ -157,12 +190,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/authorize': typeof AuthenticatedAuthorizeRoute
+  '/_authenticated/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/suppressions': typeof ApiPublicV1SuppressionsRoute
   '/api/public/v1/workspaces': typeof ApiPublicV1WorkspacesRoute
+  '/_authenticated/admin/workspaces/': typeof AuthenticatedAdminWorkspacesIndexRoute
   '/api/public/v1/auth/refresh': typeof ApiPublicV1AuthRefreshRoute
   '/api/public/v1/auth/token': typeof ApiPublicV1AuthTokenRoute
   '/api/public/v1/credits/balance': typeof ApiPublicV1CreditsBalanceRoute
@@ -179,10 +216,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin'
     | '/authorize'
+    | '/admin/apps'
+    | '/admin/'
+    | '/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
+    | '/admin/workspaces/'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
@@ -195,12 +236,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/admin'
     | '/authorize'
+    | '/admin/apps'
+    | '/admin'
+    | '/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
+    | '/admin/workspaces'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
@@ -216,10 +260,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/admin'
     | '/_authenticated/authorize'
+    | '/_authenticated/admin/apps'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
     | '/api/public/v1/suppressions'
     | '/api/public/v1/workspaces'
+    | '/_authenticated/admin/workspaces/'
     | '/api/public/v1/auth/refresh'
     | '/api/public/v1/auth/token'
     | '/api/public/v1/credits/balance'
@@ -284,6 +332,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/authorize'
       preLoaderRoute: typeof AuthenticatedAuthorizeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/apps': {
+      id: '/_authenticated/admin/apps'
+      path: '/apps'
+      fullPath: '/admin/apps'
+      preLoaderRoute: typeof AuthenticatedAdminAppsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/workspaces/': {
+      id: '/_authenticated/admin/workspaces/'
+      path: '/workspaces'
+      fullPath: '/admin/workspaces/'
+      preLoaderRoute: typeof AuthenticatedAdminWorkspacesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/workspaces/$workspaceId': {
+      id: '/_authenticated/admin/workspaces/$workspaceId'
+      path: '/workspaces/$workspaceId'
+      fullPath: '/admin/workspaces/$workspaceId'
+      preLoaderRoute: typeof AuthenticatedAdminWorkspacesWorkspaceIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/api/public/v1/contacts': {
       id: '/api/public/v1/contacts'
@@ -372,13 +448,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAppsRoute: typeof AuthenticatedAdminAppsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminWorkspacesWorkspaceIdRoute: typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
+  AuthenticatedAdminWorkspacesIndexRoute: typeof AuthenticatedAdminWorkspacesIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAppsRoute: AuthenticatedAdminAppsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminWorkspacesWorkspaceIdRoute:
+    AuthenticatedAdminWorkspacesWorkspaceIdRoute,
+  AuthenticatedAdminWorkspacesIndexRoute:
+    AuthenticatedAdminWorkspacesIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedAuthorizeRoute: typeof AuthenticatedAuthorizeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedAuthorizeRoute: AuthenticatedAuthorizeRoute,
 }
 
