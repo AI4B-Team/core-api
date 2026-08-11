@@ -1,0 +1,102 @@
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+/** Details an app handoff needs before the user consents. */
+export const getAuthorizeContext = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { appId: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: app } = await supabaseAdmin
+      .from("apps")
+      .select("id, name, description, scopes")
+      .eq("id", data.appId)
+      .maybeSingle();
+
+    const { data: memberships } = await supabaseAdmin
+      .from("memberships")
+      .select("role, workspaces(id, name, slug)")
+      .eq("user_id", context.userId);
+
+    const workspaceIds = (memberships ?? [])
+      .map((m) => (m.workspaces as { id: string } | null)?.id)
+      .filter((id): id is string => Boolean(id));
+
+    const { data: entitlements } = await supabaseAdmin
+      .from("entitlements")
+      .select("workspace_id, status, plan")
+      .eq("app_id", data.appId)
+      .in("workspace_id", workspaceIds.length ? workspaceIds : ["00000000-0000-0000-0000-000000000000"]);
+
+    return {
+      app,
+      workspaces: (memberships ?? []).map((m) => {
+        const ws = m.workspaces as { id: string; name: string; slug: string } | null;
+        const ent = (entitlements ?? []).find((e) => e.workspace_id === ws?.id);
+        return {
+          id: ws?.id ?? "",
+          name: ws?.name ?? "",
+          slug: ws?.slug ?? "",
+          role: m.role as string,
+          entitled: Boolean(ent && ["active", "trialing"].includes(ent.status as string)),
+          plan: (ent?.plan as string) ?? null,
+        };
+      }),
+    };
+  });
+
+/** Issues a single-use code the app exchanges at /api/public/v1/auth/token. */
+export const issueAuthCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { appId: string; workspaceId: string; redirectUri: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { randomToken, sha256Hex } = await import("@/lib/core/jwt.server");
+
+    const { data: membership } = await supabaseAdmin
+      .from("memberships")
+      .select("id")
+      .eq("user_id", context.userId)
+      .eq("workspace_id", data.workspaceId)
+      .maybeSingle();
+    if (!membership) throw new Error("Not a member of this workspace");
+
+    const { data: entitlement } = await supabaseAdmin
+      .from("entitlements")
+      .select("status")
+      .eq("workspace_id", data.workspaceId)
+      .eq("app_id", data.appId)
+      .maybeSingle();
+    if (!entitlement || !["active", "trialing"].includes(entitlement.status as string))
+      throw new Error("This workspace is not entitled to that app");
+
+    let redirect: URL;
+    try {
+      redirect = new URL(data.redirectUri);
+    } catch {
+      throw new Error("Invalid redirect_uri");
+    }
+
+    const { data: app } = await supabaseAdmin
+      .from("apps")
+      .select("redirect_uris")
+      .eq("id", data.appId)
+      .maybeSingle();
+    const allowed = (app?.redirect_uris as string[] | null) ?? [];
+    if (allowed.length && !allowed.includes(redirect.toString()))
+      throw new Error("redirect_uri is not registered for this app");
+
+    const code = `core_ac_${randomToken(32)}`;
+    await supabaseAdmin.from("auth_codes").insert({
+      code_hash: await sha256Hex(code),
+      user_id: context.userId,
+      app_id: data.appId,
+      workspace_id: data.workspaceId,
+      redirect_uri: redirect.toString(),
+      expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+    });
+
+    redirect.searchParams.set("code", code);
+    redirect.searchParams.set("workspace_id", data.workspaceId);
+    return { redirectTo: redirect.toString() };
+  });
