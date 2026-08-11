@@ -5,7 +5,7 @@ export function BrandMark({
   branding,
   subtitle,
 }: {
-  branding?: CoreBranding | null;
+  branding?: CoreBranding | null | undefined;
   subtitle?: string;
 }) {
   const name = branding?.brandName ?? "Real Elite";
