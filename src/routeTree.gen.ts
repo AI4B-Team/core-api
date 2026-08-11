@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAuthorizeRouteImport } from './routes/_authenticated/authorize'
 import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/contacts'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
@@ -39,6 +40,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAuthorizeRoute = AuthenticatedAuthorizeRouteImport.update({
   id: '/authorize',
@@ -113,6 +119,7 @@ const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/authorize': typeof AuthenticatedAuthorizeRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/authorize': typeof AuthenticatedAuthorizeRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/authorize': typeof AuthenticatedAuthorizeRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/admin'
     | '/authorize'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/admin'
     | '/authorize'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admin'
     | '/_authenticated/authorize'
     | '/api/public/v1/contacts'
     | '/api/public/v1/me'
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/authorize': {
       id: '/_authenticated/authorize'
@@ -354,10 +373,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAuthorizeRoute: typeof AuthenticatedAuthorizeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAuthorizeRoute: AuthenticatedAuthorizeRoute,
 }
 

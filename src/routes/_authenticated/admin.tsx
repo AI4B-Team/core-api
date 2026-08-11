@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
 });
 
-const nav = [
+const nav: { to: string; label: string; exact?: boolean }[] = [
   { to: "/admin", label: "overview", exact: true },
   { to: "/admin/workspaces", label: "workspaces" },
   { to: "/admin/apps", label: "apps" },
@@ -25,7 +25,7 @@ const nav = [
   { to: "/admin/policy", label: "policy" },
   { to: "/admin/messaging", label: "messaging" },
   { to: "/admin/compliance", label: "compliance" },
-] as const;
+];
 
 function AdminLayout() {
   const ensure = useServerFn(ensureCoreUser);
