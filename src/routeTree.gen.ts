@@ -16,6 +16,10 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAuthorizeRouteImport } from './routes/_authenticated/authorize'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAppsRouteImport } from './routes/_authenticated/admin/apps'
+import { Route as AuthenticatedAdminComplianceRouteImport } from './routes/_authenticated/admin/compliance'
+import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin/contacts'
+import { Route as AuthenticatedAdminMessagingRouteImport } from './routes/_authenticated/admin/messaging'
+import { Route as AuthenticatedAdminPolicyRouteImport } from './routes/_authenticated/admin/policy'
 import { Route as AuthenticatedAdminWorkspacesIndexRouteImport } from './routes/_authenticated/admin/workspaces/index'
 import { Route as AuthenticatedAdminWorkspacesWorkspaceIdRouteImport } from './routes/_authenticated/admin/workspaces/$workspaceId'
 import { Route as ApiPublicV1ContactsRouteImport } from './routes/api/public/v1/contacts'
@@ -65,6 +69,30 @@ const AuthenticatedAdminAppsRoute = AuthenticatedAdminAppsRouteImport.update({
   path: '/apps',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminComplianceRoute =
+  AuthenticatedAdminComplianceRouteImport.update({
+    id: '/compliance',
+    path: '/compliance',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContactsRoute =
+  AuthenticatedAdminContactsRouteImport.update({
+    id: '/contacts',
+    path: '/contacts',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMessagingRoute =
+  AuthenticatedAdminMessagingRouteImport.update({
+    id: '/messaging',
+    path: '/messaging',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPolicyRoute =
+  AuthenticatedAdminPolicyRouteImport.update({
+    id: '/policy',
+    path: '/policy',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminWorkspacesIndexRoute =
   AuthenticatedAdminWorkspacesIndexRouteImport.update({
     id: '/workspaces/',
@@ -148,6 +176,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/authorize': typeof AuthenticatedAuthorizeRoute
   '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/admin/policy': typeof AuthenticatedAdminPolicyRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
@@ -169,6 +201,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/authorize': typeof AuthenticatedAuthorizeRoute
   '/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/admin/policy': typeof AuthenticatedAdminPolicyRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
@@ -193,6 +229,10 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/authorize': typeof AuthenticatedAuthorizeRoute
   '/_authenticated/admin/apps': typeof AuthenticatedAdminAppsRoute
+  '/_authenticated/admin/compliance': typeof AuthenticatedAdminComplianceRoute
+  '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/_authenticated/admin/messaging': typeof AuthenticatedAdminMessagingRoute
+  '/_authenticated/admin/policy': typeof AuthenticatedAdminPolicyRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/workspaces/$workspaceId': typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   '/api/public/v1/contacts': typeof ApiPublicV1ContactsRoute
@@ -217,6 +257,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/authorize'
     | '/admin/apps'
+    | '/admin/compliance'
+    | '/admin/contacts'
+    | '/admin/messaging'
+    | '/admin/policy'
     | '/admin/'
     | '/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
@@ -238,6 +282,10 @@ export interface FileRouteTypes {
     | '/auth'
     | '/authorize'
     | '/admin/apps'
+    | '/admin/compliance'
+    | '/admin/contacts'
+    | '/admin/messaging'
+    | '/admin/policy'
     | '/admin'
     | '/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
@@ -261,6 +309,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/authorize'
     | '/_authenticated/admin/apps'
+    | '/_authenticated/admin/compliance'
+    | '/_authenticated/admin/contacts'
+    | '/_authenticated/admin/messaging'
+    | '/_authenticated/admin/policy'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/workspaces/$workspaceId'
     | '/api/public/v1/contacts'
@@ -345,6 +397,34 @@ declare module '@tanstack/react-router' {
       path: '/apps'
       fullPath: '/admin/apps'
       preLoaderRoute: typeof AuthenticatedAdminAppsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/compliance': {
+      id: '/_authenticated/admin/compliance'
+      path: '/compliance'
+      fullPath: '/admin/compliance'
+      preLoaderRoute: typeof AuthenticatedAdminComplianceRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/contacts': {
+      id: '/_authenticated/admin/contacts'
+      path: '/contacts'
+      fullPath: '/admin/contacts'
+      preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/messaging': {
+      id: '/_authenticated/admin/messaging'
+      path: '/messaging'
+      fullPath: '/admin/messaging'
+      preLoaderRoute: typeof AuthenticatedAdminMessagingRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/policy': {
+      id: '/_authenticated/admin/policy'
+      path: '/policy'
+      fullPath: '/admin/policy'
+      preLoaderRoute: typeof AuthenticatedAdminPolicyRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/workspaces/': {
@@ -450,6 +530,10 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAppsRoute: typeof AuthenticatedAdminAppsRoute
+  AuthenticatedAdminComplianceRoute: typeof AuthenticatedAdminComplianceRoute
+  AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
+  AuthenticatedAdminMessagingRoute: typeof AuthenticatedAdminMessagingRoute
+  AuthenticatedAdminPolicyRoute: typeof AuthenticatedAdminPolicyRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminWorkspacesWorkspaceIdRoute: typeof AuthenticatedAdminWorkspacesWorkspaceIdRoute
   AuthenticatedAdminWorkspacesIndexRoute: typeof AuthenticatedAdminWorkspacesIndexRoute
@@ -457,6 +541,10 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAppsRoute: AuthenticatedAdminAppsRoute,
+  AuthenticatedAdminComplianceRoute: AuthenticatedAdminComplianceRoute,
+  AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
+  AuthenticatedAdminMessagingRoute: AuthenticatedAdminMessagingRoute,
+  AuthenticatedAdminPolicyRoute: AuthenticatedAdminPolicyRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminWorkspacesWorkspaceIdRoute:
     AuthenticatedAdminWorkspacesWorkspaceIdRoute,

@@ -27,7 +27,7 @@ function Compliance() {
               <thead>
                 <tr>
                   <Th>legal entity</Th>
-                  <Th>ein</Th>
+                  <Th>vertical</Th>
                   <Th>status</Th>
                   <Th>tcr brand id</Th>
                   <Th>submitted</Th>
@@ -37,7 +37,7 @@ function Compliance() {
                 {brands.data.brands.map((b) => (
                   <tr key={b.id as string}>
                     <Td>{(b.legal_entities as { legal_name?: string } | null)?.legal_name ?? "—"}</Td>
-                    <Td mono>{(b.ein as string) ?? "—"}</Td>
+                    <Td mono>{(b.vertical as string) ?? "—"}</Td>
                     <Td>
                       <StatusTag value={b.status as string} />
                     </Td>
@@ -59,7 +59,7 @@ function Compliance() {
                 <tr>
                   <Th>use case</Th>
                   <Th>status</Th>
-                  <Th>tcr campaign id</Th>
+                  <Th>provider campaign id</Th>
                   <Th>created</Th>
                 </tr>
               </thead>
@@ -70,7 +70,7 @@ function Compliance() {
                     <Td>
                       <StatusTag value={c.status as string} />
                     </Td>
-                    <Td mono>{(c.tcr_campaign_id as string) ?? "—"}</Td>
+                    <Td mono>{(c.provider_campaign_id as string) ?? "—"}</Td>
                     <Td mono>{fmt(c.created_at as string)}</Td>
                   </tr>
                 ))}
@@ -100,7 +100,7 @@ function Compliance() {
                     <Td>
                       <StatusTag value={n.status as string} />
                     </Td>
-                    <Td mono>{fmt(n.created_at as string)}</Td>
+                    <Td mono>{fmt(n.provisioned_at as string)}</Td>
                   </tr>
                 ))}
               </tbody>
