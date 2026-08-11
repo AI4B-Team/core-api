@@ -15,7 +15,7 @@ export const getAuthorizeContext = createServerFn({ method: "POST" })
 
     const { data: memberships } = await supabaseAdmin
       .from("memberships")
-      .select("role, workspaces(id, name, slug)")
+      .select("role, workspaces(id, name, slug, account_id)")
       .eq("user_id", context.userId);
 
     const workspaceIds = (memberships ?? [])
@@ -28,10 +28,35 @@ export const getAuthorizeContext = createServerFn({ method: "POST" })
       .eq("app_id", data.appId)
       .in("workspace_id", workspaceIds.length ? workspaceIds : ["00000000-0000-0000-0000-000000000000"]);
 
+    const accountIds = Array.from(
+      new Set(
+        (memberships ?? [])
+          .map((m) => (m.workspaces as { account_id?: string } | null)?.account_id)
+          .filter((a): a is string => Boolean(a)),
+      ),
+    );
+    const { data: accounts } = await supabaseAdmin
+      .from("accounts")
+      .select("id, name, brand_name, logo_url, accent_color, support_email")
+      .in("id", accountIds.length ? accountIds : ["00000000-0000-0000-0000-000000000000"]);
+
+    // White-label only applies when every workspace belongs to one account.
+    const soleAccount = accounts && accounts.length === 1 ? accounts[0] : null;
+    const branding = {
+      brandName: (soleAccount?.brand_name as string) || "Real Elite",
+      logoUrl: (soleAccount?.logo_url as string) ?? null,
+      accentColor: (soleAccount?.accent_color as string) ?? null,
+      supportEmail: (soleAccount?.support_email as string) ?? null,
+      appName: (app?.name as string) ?? null,
+      appIcon: null as string | null,
+    };
+
     return {
       app,
+      branding,
       workspaces: (memberships ?? []).map((m) => {
-        const ws = m.workspaces as { id: string; name: string; slug: string } | null;
+        const ws = m.workspaces as { id: string; name: string; slug: string; account_id?: string } | null;
+        const account = (accounts ?? []).find((a) => a.id === ws?.account_id);
         const ent = (entitlements ?? []).find((e) => e.workspace_id === ws?.id);
         return {
           id: ws?.id ?? "",
@@ -40,6 +65,7 @@ export const getAuthorizeContext = createServerFn({ method: "POST" })
           role: m.role as string,
           entitled: Boolean(ent && ["active", "trialing"].includes(ent.status as string)),
           plan: (ent?.plan as string) ?? null,
+          accountName: ((account?.brand_name as string) || (account?.name as string)) ?? null,
         };
       }),
     };

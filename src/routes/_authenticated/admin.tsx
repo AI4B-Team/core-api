@@ -30,11 +30,52 @@ const nav: { to: string; label: string; exact?: boolean }[] = [
 function AdminLayout() {
   const ensure = useServerFn(ensureCoreUser);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: me } = useQuery({ queryKey: ["core-user"], queryFn: () => ensure({}) });
+  const { data: me, isLoading: meLoading } = useQuery({
+    queryKey: ["core-user"],
+    queryFn: () => ensure({}),
+  });
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  if (meLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <span className="mono-label">checking access…</span>
+      </div>
+    );
+  }
+
+  if (!me?.is_staff) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-6">
+        <div className="panel w-full max-w-md p-8">
+          <p className="mono-label">403</p>
+          <h1 className="mt-3 text-2xl font-semibold">Staff access only</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            The Core console is internal. Your account is signed in as{" "}
+            <span className="font-mono text-foreground">{me?.email ?? "unknown"}</span> but is not
+            marked as staff.
+          </p>
+          <div className="mt-6 flex gap-3">
+            <Link to="/" className="mono-label hover:text-foreground">
+              back to core
+            </Link>
+            <button
+              className="mono-label hover:text-foreground"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                window.location.href = "/auth";
+              }}
+            >
+              sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

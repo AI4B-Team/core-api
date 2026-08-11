@@ -55,30 +55,42 @@ export type Database = {
       }
       accounts: {
         Row: {
+          accent_color: string | null
           billing_email: string
+          brand_name: string | null
           created_at: string
           id: string
           is_reseller: boolean
+          logo_url: string | null
           name: string
           stripe_customer_id: string | null
+          support_email: string | null
           type: string
         }
         Insert: {
+          accent_color?: string | null
           billing_email: string
+          brand_name?: string | null
           created_at?: string
           id?: string
           is_reseller?: boolean
+          logo_url?: string | null
           name: string
           stripe_customer_id?: string | null
+          support_email?: string | null
           type: string
         }
         Update: {
+          accent_color?: string | null
           billing_email?: string
+          brand_name?: string | null
           created_at?: string
           id?: string
           is_reseller?: boolean
+          logo_url?: string | null
           name?: string
           stripe_customer_id?: string | null
+          support_email?: string | null
           type?: string
         }
         Relationships: []
