@@ -23,7 +23,7 @@ function PolicyChecks() {
   return (
     <>
       <PageHeader
-        label="chokepoint"
+        label="Chokepoint"
         title="Policy checks"
         action={
           <div className="flex gap-1">
@@ -42,9 +42,9 @@ function PolicyChecks() {
         }
       />
 
-      <Panel title="every regulated action, allow or deny">
+      <Panel title="Every Regulated Action, Allow or Deny">
         {isLoading ? (
-          <Empty>loading…</Empty>
+          <Empty>Loading…</Empty>
         ) : error ? (
           <Empty>{(error as Error).message}</Empty>
         ) : !data?.length ? (
@@ -53,13 +53,13 @@ function PolicyChecks() {
           <table className="w-full">
             <thead>
               <tr>
-                <Th>action</Th>
-                <Th>identifier</Th>
-                <Th>actor</Th>
-                <Th>decision</Th>
-                <Th>denied by</Th>
-                <Th>rules</Th>
-                <Th>when</Th>
+                <Th>Action</Th>
+                <Th>Identifier</Th>
+                <Th>Actor</Th>
+                <Th>Decision</Th>
+                <Th>Denied by</Th>
+                <Th>Rules</Th>
+                <Th>When</Th>
               </tr>
             </thead>
             <tbody>

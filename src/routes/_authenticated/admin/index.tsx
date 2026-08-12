@@ -24,22 +24,22 @@ function Overview() {
 
   return (
     <>
-      <PageHeader label="core" title="Platform overview" />
+      <PageHeader label="Core" title="Platform overview" />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="accounts" value={c.accounts} />
-        <Stat label="legal entities" value={c.entities} />
-        <Stat label="workspaces" value={c.workspaces} />
-        <Stat label="users" value={c.users} />
-        <Stat label="registered apps" value={c.apps} />
-        <Stat label="canonical contacts" value={c.contacts} />
-        <Stat label="messages" value={c.messages} />
-        <Stat label="suppressions" value={c.suppressions} tone="warn" />
+        <Stat label="Accounts" value={c.accounts} />
+        <Stat label="Legal Entities" value={c.entities} />
+        <Stat label="Workspaces" value={c.workspaces} />
+        <Stat label="Users" value={c.users} />
+        <Stat label="Registered Apps" value={c.apps} />
+        <Stat label="Canonical Contacts" value={c.contacts} />
+        <Stat label="Messages" value={c.messages} />
+        <Stat label="Suppressions" value={c.suppressions} tone="warn" />
       </div>
 
       <div className="mb-6 grid gap-3 md:grid-cols-2">
         <div className="panel p-4">
-          <span className="mono-label">carrier provider</span>
+          <span className="mono-label">Carrier Provider</span>
           <p className="mt-2 text-sm">
             {data.providerConfigured ? (
               <span className="text-primary">credentials configured</span>
@@ -52,7 +52,7 @@ function Overview() {
           </p>
         </div>
         <div className="panel p-4">
-          <span className="mono-label">policy denials by rule</span>
+          <span className="mono-label">Policy Denials by Rule</span>
           <div className="mt-3 space-y-1.5">
             {Object.keys(data.denyCounts).length === 0 && (
               <p className="text-sm text-muted-foreground">No denials recorded.</p>
@@ -68,17 +68,17 @@ function Overview() {
       </div>
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel title="recent policy checks">
+        <Panel title="Recent Policy Checks">
           {data.recentChecks.length === 0 ? (
             <Empty>No policy checks yet.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>action</Th>
-                  <Th>actor</Th>
-                  <Th>decision</Th>
-                  <Th>when</Th>
+                  <Th>Action</Th>
+                  <Th>Actor</Th>
+                  <Th>Decision</Th>
+                  <Th>When</Th>
                 </tr>
               </thead>
               <tbody>
@@ -101,17 +101,17 @@ function Overview() {
           )}
         </Panel>
 
-        <Panel title="recent messages">
+        <Panel title="Recent Messages">
           {data.recentMessages.length === 0 ? (
             <Empty>No messages yet.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>to</Th>
-                  <Th>channel</Th>
-                  <Th>status</Th>
-                  <Th>when</Th>
+                  <Th>To</Th>
+                  <Th>Channel</Th>
+                  <Th>Status</Th>
+                  <Th>When</Th>
                 </tr>
               </thead>
               <tbody>

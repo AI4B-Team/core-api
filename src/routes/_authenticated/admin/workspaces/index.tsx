@@ -17,7 +17,7 @@ function Workspaces() {
 
   return (
     <>
-      <PageHeader label="identity" title="Workspaces" />
+      <PageHeader label="Identity" title="Workspaces" />
       <Panel title={`${data?.length ?? 0} workspaces`}>
         {!data?.length ? (
           <Empty>No workspaces provisioned yet.</Empty>
@@ -25,12 +25,12 @@ function Workspaces() {
           <table className="w-full">
             <thead>
               <tr>
-                <Th>workspace</Th>
-                <Th>account</Th>
-                <Th>legal entity</Th>
-                <Th>brand</Th>
-                <Th>timezone</Th>
-                <Th>created</Th>
+                <Th>Workspace</Th>
+                <Th>Account</Th>
+                <Th>Legal Entity</Th>
+                <Th>Brand</Th>
+                <Th>Timezone</Th>
+                <Th>Created</Th>
               </tr>
             </thead>
             <tbody>

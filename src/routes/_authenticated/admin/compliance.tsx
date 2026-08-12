@@ -19,18 +19,18 @@ function Compliance() {
       <PageHeader label="10dlc · suppression" title="Compliance" />
 
       <div className="grid gap-3">
-        <Panel title="brands">
+        <Panel title="Brands">
           {!brands.data?.brands.length ? (
             <Empty>No brands registered.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>legal entity</Th>
-                  <Th>vertical</Th>
-                  <Th>status</Th>
-                  <Th>tcr brand id</Th>
-                  <Th>submitted</Th>
+                  <Th>Legal Entity</Th>
+                  <Th>Vertical</Th>
+                  <Th>Status</Th>
+                  <Th>Tcr Brand ID</Th>
+                  <Th>Submitted</Th>
                 </tr>
               </thead>
               <tbody>
@@ -50,17 +50,17 @@ function Compliance() {
           )}
         </Panel>
 
-        <Panel title="campaigns (10dlc)">
+        <Panel title="Campaigns (10dlc)">
           {!brands.data?.campaigns.length ? (
             <Empty>No campaigns registered.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>use case</Th>
-                  <Th>status</Th>
-                  <Th>provider campaign id</Th>
-                  <Th>created</Th>
+                  <Th>Use Case</Th>
+                  <Th>Status</Th>
+                  <Th>Provider Campaign ID</Th>
+                  <Th>Created</Th>
                 </tr>
               </thead>
               <tbody>
@@ -79,17 +79,17 @@ function Compliance() {
           )}
         </Panel>
 
-        <Panel title="phone numbers">
+        <Panel title="Phone Numbers">
           {!brands.data?.numbers.length ? (
             <Empty>No numbers provisioned.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>number</Th>
-                  <Th>capabilities</Th>
-                  <Th>status</Th>
-                  <Th>provisioned</Th>
+                  <Th>Number</Th>
+                  <Th>Capabilities</Th>
+                  <Th>Status</Th>
+                  <Th>Provisioned</Th>
                 </tr>
               </thead>
               <tbody>
@@ -108,18 +108,18 @@ function Compliance() {
           )}
         </Panel>
 
-        <Panel title="suppressions">
+        <Panel title="Suppressions">
           {!suppressions.data?.length ? (
             <Empty>No suppressions recorded.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>identifier</Th>
-                  <Th>channel</Th>
-                  <Th>legal entity</Th>
-                  <Th>reason</Th>
-                  <Th>when</Th>
+                  <Th>Identifier</Th>
+                  <Th>Channel</Th>
+                  <Th>Legal Entity</Th>
+                  <Th>Reason</Th>
+                  <Th>When</Th>
                 </tr>
               </thead>
               <tbody>

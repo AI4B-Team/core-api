@@ -68,7 +68,7 @@ function Apps() {
 
   return (
     <>
-      <PageHeader label="registry" title="Apps and service credentials" />
+      <PageHeader label="Registry" title="Apps and service credentials" />
 
       {issued && (
         <section className="panel mb-3 border-warning/50 p-4">
@@ -99,19 +99,19 @@ function Apps() {
       )}
 
       <div className="grid gap-3">
-        <Panel title="registered apps">
+        <Panel title="Registered Apps">
           {!data?.apps.length ? (
             <Empty>No apps registered.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>app id</Th>
-                  <Th>name</Th>
-                  <Th>base url</Th>
+                  <Th>App ID</Th>
+                  <Th>Name</Th>
+                  <Th>Base URL</Th>
                   <Th>à la carte</Th>
-                  <Th>status</Th>
-                  <Th>actions</Th>
+                  <Th>Status</Th>
+                  <Th>Actions</Th>
                 </tr>
               </thead>
               <tbody>
@@ -175,20 +175,20 @@ function Apps() {
           )}
         </Panel>
 
-        <Panel title="service credentials">
+        <Panel title="Service Credentials">
           {!data?.credentials.length ? (
             <Empty>No credentials issued.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>app</Th>
-                  <Th>name</Th>
-                  <Th>prefix</Th>
-                  <Th>created</Th>
-                  <Th>last used</Th>
-                  <Th>status</Th>
-                  <Th>actions</Th>
+                  <Th>App</Th>
+                  <Th>Name</Th>
+                  <Th>Prefix</Th>
+                  <Th>Created</Th>
+                  <Th>Last Used</Th>
+                  <Th>Status</Th>
+                  <Th>Actions</Th>
                 </tr>
               </thead>
               <tbody>

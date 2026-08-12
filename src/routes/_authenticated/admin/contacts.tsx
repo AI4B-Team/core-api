@@ -14,10 +14,10 @@ function Contacts() {
 
   return (
     <>
-      <PageHeader label="canonical" title="Contacts" />
-      <Panel title="one person per legal entity, deduped on identifier">
+      <PageHeader label="Canonical" title="Contacts" />
+      <Panel title="One Person per Legal Entity, Deduped on Identifier">
         {isLoading ? (
-          <Empty>loading…</Empty>
+          <Empty>Loading…</Empty>
         ) : error ? (
           <Empty>{(error as Error).message}</Empty>
         ) : !data?.length ? (
@@ -26,12 +26,12 @@ function Contacts() {
           <table className="w-full">
             <thead>
               <tr>
-                <Th>name</Th>
-                <Th>company</Th>
-                <Th>phones</Th>
-                <Th>emails</Th>
-                <Th>timezone</Th>
-                <Th>updated</Th>
+                <Th>Name</Th>
+                <Th>Company</Th>
+                <Th>Phones</Th>
+                <Th>Emails</Th>
+                <Th>Timezone</Th>
+                <Th>Updated</Th>
               </tr>
             </thead>
             <tbody>
