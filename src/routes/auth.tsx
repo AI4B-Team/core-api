@@ -20,9 +20,9 @@ function safePath(value: unknown): string {
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Real Elite" },
+      { title: "Sign In — Real Elite" },
       { name: "description", content: "Sign in once to reach every Real Elite application." },
-      { property: "og:title", content: "Sign in — Real Elite" },
+      { property: "og:title", content: "Sign In — Real Elite" },
       { property: "og:description", content: "Centralized sign-in for the Real Elite platform." },
     ],
   }),
@@ -71,7 +71,6 @@ function AuthScreen() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.add("dark");
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) window.location.replace(next);
     });
@@ -135,7 +134,7 @@ function AuthScreen() {
         <BrandMark branding={branding} />
         <div>
           <h2 className="max-w-sm text-3xl leading-tight font-semibold">
-            One sign-in for every {brandName} application.
+            One Sign-In For Every {brandName} Application.
           </h2>
           <p className="mt-4 max-w-sm text-sm text-muted-foreground">
             {branding?.appName
@@ -151,19 +150,19 @@ function AuthScreen() {
           <div className="lg:hidden">
             <BrandMark branding={branding} />
           </div>
-          <p className="mono-label mt-8 lg:mt-0">
-            {mode === "signup" ? "create account" : "sign in"}
+          <p className="eyebrow mt-8 lg:mt-0">
+            {mode === "signup" ? "Create Account" : "Sign In"}
           </p>
           <h1 className="mt-3 text-2xl font-semibold">
             {mode === "signup"
-              ? `Create your ${brandName} account`
+              ? `Create Your ${brandName} Account`
               : branding?.appName
-                ? `Continue to ${branding.appName}`
-                : `Sign in to ${brandName}`}
+                ? `Continue To ${branding.appName}`
+                : `Sign In To ${brandName}`}
           </h1>
 
           {linkSent ? (
-            <div className="mt-8 rounded border border-border bg-surface p-5">
+            <div className="mt-8 rounded-2xl border border-border bg-surface p-5">
               <p className="text-sm">
                 A sign-in link is on its way to{" "}
                 <span className="font-mono text-foreground">{email}</span>. Open it on this device to
@@ -171,26 +170,26 @@ function AuthScreen() {
               </p>
               <button
                 type="button"
-                className="mono-label mt-4 hover:text-foreground"
+                className="mt-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
                 onClick={() => setLinkSent(false)}
               >
-                use a different method
+                Use A Different Method
               </button>
             </div>
           ) : (
             <>
-              <div className="mt-6 flex gap-1 rounded border border-border bg-surface p-1">
+              <div className="mt-6 flex gap-1 rounded-xl border border-border bg-surface p-1">
                 {(
                   [
-                    ["password", "password"],
-                    ["magic", "magic link"],
+                    ["password", "Password"],
+                    ["magic", "Magic Link"],
                   ] as const
                 ).map(([value, label]) => (
                   <button
                     key={value}
                     type="button"
                     onClick={() => setMode(value)}
-                    className={`flex-1 rounded-sm px-3 py-1.5 font-mono text-xs transition-colors ${
+                    className={`flex-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
                       mode === value || (mode === "signup" && value === "password")
                         ? "bg-accent text-foreground"
                         : "text-muted-foreground hover:text-foreground"
@@ -204,7 +203,7 @@ function AuthScreen() {
               <form onSubmit={submit} className="mt-6 space-y-4">
                 {mode === "signup" && (
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full name</Label>
+                    <Label htmlFor="name">Full Name</Label>
                     <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
                   </div>
                 )}
@@ -233,33 +232,33 @@ function AuthScreen() {
                     />
                   </div>
                 )}
-                <Button type="submit" className="w-full font-mono" disabled={busy}>
+                <Button type="submit" className="w-full font-semibold" disabled={busy}>
                   {busy
-                    ? "working…"
+                    ? "Working…"
                     : mode === "magic"
-                      ? "email me a link"
+                      ? "Email Me A Link"
                       : mode === "signup"
-                        ? "create account"
-                        : "sign in"}
+                        ? "Create Account"
+                        : "Sign In"}
                 </Button>
               </form>
 
               <div className="my-6 flex items-center gap-3">
                 <div className="h-px flex-1 bg-border" />
-                <span className="mono-label">or</span>
+                <span className="mono-label">Or</span>
                 <div className="h-px flex-1 bg-border" />
               </div>
 
-              <Button variant="outline" className="w-full font-mono" onClick={google}>
-                continue with google
+              <Button variant="outline" className="w-full font-semibold" onClick={google}>
+                Continue With Google
               </Button>
 
               <button
                 type="button"
-                className="mono-label mt-8 hover:text-foreground"
+                className="mt-8 text-sm font-semibold text-muted-foreground hover:text-foreground"
                 onClick={() => setMode(mode === "signup" ? "password" : "signup")}
               >
-                {mode === "signup" ? "already registered? sign in" : "need an account? register"}
+                {mode === "signup" ? "Already Registered? Sign In" : "Need An Account? Register"}
               </button>
             </>
           )}

@@ -16,7 +16,7 @@ function WorkspaceDetail() {
     queryFn: () => fn({ data: { workspaceId } }),
   });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
   const ws = data?.workspace as Record<string, unknown> | null;
   if (!ws) return <p className="text-sm text-muted-foreground">Workspace not found.</p>;
@@ -29,23 +29,23 @@ function WorkspaceDetail() {
       <PageHeader label={(ws["slug"] as string) ?? "workspace"} title={(ws["name"] as string) ?? ""} />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="account" value={(acct?.["name"] as string) ?? "—"} />
-        <Stat label="legal entity" value={(le?.["legal_name"] as string) ?? "—"} />
-        <Stat label="brand status" value={(le?.["brand_status"] as string) ?? "—"} />
-        <Stat label="autonomy level" value={String(data?.policy?.autonomy_level ?? "default")} />
+        <Stat label="Account" value={(acct?.["name"] as string) ?? "—"} />
+        <Stat label="Legal Entity" value={(le?.["legal_name"] as string) ?? "—"} />
+        <Stat label="Brand Status" value={(le?.["brand_status"] as string) ?? "—"} />
+        <Stat label="Autonomy Level" value={String(data?.policy?.autonomy_level ?? "default")} />
       </div>
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <Panel title="entitlements">
+        <Panel title="Entitlements">
           {!data?.entitlements.length ? (
             <Empty>No apps entitled.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>app</Th>
-                  <Th>plan</Th>
-                  <Th>status</Th>
+                  <Th>App</Th>
+                  <Th>Plan</Th>
+                  <Th>Status</Th>
                 </tr>
               </thead>
               <tbody>
@@ -63,15 +63,15 @@ function WorkspaceDetail() {
           )}
         </Panel>
 
-        <Panel title="credit balances">
+        <Panel title="Credit Balances">
           {!data?.balances.length ? (
             <Empty>No meters funded.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>meter</Th>
-                  <Th>balance</Th>
+                  <Th>Meter</Th>
+                  <Th>Balance</Th>
                 </tr>
               </thead>
               <tbody>
@@ -86,15 +86,15 @@ function WorkspaceDetail() {
           )}
         </Panel>
 
-        <Panel title="members">
+        <Panel title="Members">
           {!data?.members.length ? (
             <Empty>No members.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>user</Th>
-                  <Th>role</Th>
+                  <Th>User</Th>
+                  <Th>Role</Th>
                 </tr>
               </thead>
               <tbody>
@@ -112,17 +112,17 @@ function WorkspaceDetail() {
           )}
         </Panel>
 
-        <Panel title="credit ledger">
+        <Panel title="Credit Ledger">
           {!data?.ledger.length ? (
             <Empty>No ledger entries.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>meter</Th>
-                  <Th>qty</Th>
-                  <Th>app</Th>
-                  <Th>when</Th>
+                  <Th>Meter</Th>
+                  <Th>Qty</Th>
+                  <Th>App</Th>
+                  <Th>When</Th>
                 </tr>
               </thead>
               <tbody>

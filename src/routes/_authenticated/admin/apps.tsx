@@ -41,7 +41,7 @@ function Apps() {
   const revokeMut = useMutation({
     mutationFn: (id: string) => revoke({ data: { id } }),
     onSuccess: () => {
-      toast.success("credential revoked");
+      toast.success("Credential revoked");
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -50,14 +50,14 @@ function Apps() {
   const urlMut = useMutation({
     mutationFn: (v: { app_id: string; base_url: string }) => setBaseUrl({ data: v }),
     onSuccess: () => {
-      toast.success("base url updated");
+      toast.success("Base URL updated");
       setEditing(null);
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
 
   function issue(appId: string) {
@@ -68,7 +68,7 @@ function Apps() {
 
   return (
     <>
-      <PageHeader label="registry" title="Apps and service credentials" />
+      <PageHeader label="Registry" title="Apps and Service Credentials" />
 
       {issued && (
         <section className="panel mb-3 border-warning/50 p-4">
@@ -86,32 +86,32 @@ function Apps() {
               className="mono-label hover:text-foreground"
               onClick={async () => {
                 await navigator.clipboard.writeText(issued.token);
-                toast.success("copied to clipboard");
+                toast.success("Copied to clipboard");
               }}
             >
-              copy
+              Copy
             </button>
             <button className="mono-label hover:text-foreground" onClick={() => setIssued(null)}>
-              dismiss
+              Dismiss
             </button>
           </div>
         </section>
       )}
 
       <div className="grid gap-3">
-        <Panel title="registered apps">
+        <Panel title="Registered Apps">
           {!data?.apps.length ? (
             <Empty>No apps registered.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>app id</Th>
-                  <Th>name</Th>
-                  <Th>base url</Th>
+                  <Th>App ID</Th>
+                  <Th>Name</Th>
+                  <Th>Base URL</Th>
                   <Th>à la carte</Th>
-                  <Th>status</Th>
-                  <Th>actions</Th>
+                  <Th>Status</Th>
+                  <Th>Actions</Th>
                 </tr>
               </thead>
               <tbody>
@@ -136,13 +136,13 @@ function Apps() {
                               className="mono-label hover:text-foreground"
                               onClick={() => urlMut.mutate({ app_id: id, base_url: editing.value })}
                             >
-                              save
+                              Save
                             </button>
                             <button
                               className="mono-label hover:text-foreground"
                               onClick={() => setEditing(null)}
                             >
-                              cancel
+                              Cancel
                             </button>
                           </span>
                         ) : (
@@ -164,7 +164,7 @@ function Apps() {
                           disabled={createMut.isPending}
                           onClick={() => issue(id)}
                         >
-                          issue credential
+                          Issue Credential
                         </button>
                       </Td>
                     </tr>
@@ -175,20 +175,20 @@ function Apps() {
           )}
         </Panel>
 
-        <Panel title="service credentials">
+        <Panel title="Service Credentials">
           {!data?.credentials.length ? (
             <Empty>No credentials issued.</Empty>
           ) : (
             <table className="w-full">
               <thead>
                 <tr>
-                  <Th>app</Th>
-                  <Th>name</Th>
-                  <Th>prefix</Th>
-                  <Th>created</Th>
-                  <Th>last used</Th>
-                  <Th>status</Th>
-                  <Th>actions</Th>
+                  <Th>App</Th>
+                  <Th>Name</Th>
+                  <Th>Prefix</Th>
+                  <Th>Created</Th>
+                  <Th>Last Used</Th>
+                  <Th>Status</Th>
+                  <Th>Actions</Th>
                 </tr>
               </thead>
               <tbody>
@@ -212,7 +212,7 @@ function Apps() {
                               revokeMut.mutate(c.id as string);
                           }}
                         >
-                          revoke
+                          Revoke
                         </button>
                       ) : (
                         <span className="mono-label">—</span>

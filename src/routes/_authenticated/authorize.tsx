@@ -11,9 +11,9 @@ import type { CoreBranding } from "@/lib/core/branding.functions";
 export const Route = createFileRoute("/_authenticated/authorize")({
   head: () => ({
     meta: [
-      { title: "Choose a workspace — Real Elite" },
+      { title: "Choose A Workspace — Real Elite" },
       { name: "description", content: "Grant a Real Elite application access to one of your workspaces." },
-      { property: "og:title", content: "Choose a workspace — Real Elite" },
+      { property: "og:title", content: "Choose A Workspace — Real Elite" },
       { property: "og:description", content: "Pick the workspace an application may act inside." },
     ],
   }),
@@ -33,7 +33,6 @@ function Authorize() {
   const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
-    document.documentElement.classList.add("dark");
   }, []);
 
   const { data, isLoading } = useQuery({
@@ -66,7 +65,7 @@ function Authorize() {
   if (isLoading)
     return (
       <Shell branding={branding}>
-        <p className="mono-label">loading…</p>
+        <p className="mono-label">Loading…</p>
       </Shell>
     );
 
@@ -94,8 +93,8 @@ function Authorize() {
 
   return (
     <Shell branding={branding}>
-      <p className="mono-label">choose workspace</p>
-      <h1 className="mt-3 text-2xl font-semibold">Continue to {data.app.name}</h1>
+      <p className="mono-label">Choose Workspace</p>
+      <h1 className="mt-3 text-2xl font-semibold">Continue To {data.app.name}</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Pick the workspace {data.app.name} should work inside. You will be returned to{" "}
         <span className="font-mono text-foreground">{targetHost}</span> with a single-use code.
@@ -111,7 +110,7 @@ function Authorize() {
             type="button"
             disabled={!ws.entitled}
             onClick={() => setSelected(ws.id)}
-            className={`flex w-full items-center justify-between rounded border px-4 py-3 text-left transition-colors ${
+            className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
               selected === ws.id ? "border-primary bg-accent" : "border-border bg-surface"
             } ${ws.entitled ? "hover:bg-accent" : "cursor-not-allowed opacity-50"}`}
           >
@@ -122,7 +121,7 @@ function Authorize() {
                 {ws.slug} · {ws.role}
               </span>
             </span>
-            <span className="mono-label">{ws.entitled ? (ws.plan ?? "entitled") : "not entitled"}</span>
+            <span className="mono-label">{ws.entitled ? (ws.plan ?? "Entitled") : "Not Entitled"}</span>
           </button>
         ))}
       </div>
@@ -135,14 +134,14 @@ function Authorize() {
 
       <div className="mt-8 flex gap-3">
         <Button
-          className="font-mono"
+          className="font-semibold"
           disabled={!selected || grant.isPending}
           onClick={() => selected && grant.mutate(selected)}
         >
-          {grant.isPending ? "issuing…" : "continue"}
+          {grant.isPending ? "Issuing…" : "Continue"}
         </Button>
-        <Button variant="outline" className="font-mono" onClick={() => navigate({ to: "/" })}>
-          cancel
+        <Button variant="outline" className="font-semibold" onClick={() => navigate({ to: "/" })}>
+          Cancel
         </Button>
       </div>
 

@@ -12,12 +12,12 @@ function Workspaces() {
   const fn = useServerFn(listWorkspaces);
   const { data, isLoading, error } = useQuery({ queryKey: ["admin-workspaces"], queryFn: () => fn({}) });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
 
   return (
     <>
-      <PageHeader label="identity" title="Workspaces" />
+      <PageHeader label="Identity" title="Workspaces" />
       <Panel title={`${data?.length ?? 0} workspaces`}>
         {!data?.length ? (
           <Empty>No workspaces provisioned yet.</Empty>
@@ -25,12 +25,12 @@ function Workspaces() {
           <table className="w-full">
             <thead>
               <tr>
-                <Th>workspace</Th>
-                <Th>account</Th>
-                <Th>legal entity</Th>
-                <Th>brand</Th>
-                <Th>timezone</Th>
-                <Th>created</Th>
+                <Th>Workspace</Th>
+                <Th>Account</Th>
+                <Th>Legal Entity</Th>
+                <Th>Brand</Th>
+                <Th>Timezone</Th>
+                <Th>Created</Th>
               </tr>
             </thead>
             <tbody>

@@ -18,10 +18,10 @@ function Messaging() {
 
   return (
     <>
-      <PageHeader label="communications" title="Messages" />
-      <Panel title="outbound and inbound traffic">
+      <PageHeader label="Communications" title="Messages" />
+      <Panel title="Outbound and Inbound Traffic">
         {isLoading ? (
-          <Empty>loading…</Empty>
+          <Empty>Loading…</Empty>
         ) : error ? (
           <Empty>{(error as Error).message}</Empty>
         ) : !data?.length ? (
@@ -30,13 +30,13 @@ function Messaging() {
           <table className="w-full">
             <thead>
               <tr>
-                <Th>direction</Th>
-                <Th>from</Th>
-                <Th>to</Th>
-                <Th>body</Th>
-                <Th>status</Th>
-                <Th>error</Th>
-                <Th>when</Th>
+                <Th>Direction</Th>
+                <Th>From</Th>
+                <Th>To</Th>
+                <Th>Body</Th>
+                <Th>Status</Th>
+                <Th>Error</Th>
+                <Th>When</Th>
               </tr>
             </thead>
             <tbody>
