@@ -174,6 +174,48 @@ function Apps() {
                           </button>
                         )}
                       </Td>
+                      <Td mono>
+                        {isEditingUris ? (
+                          <span className="flex items-start gap-2">
+                            <textarea
+                              autoFocus
+                              rows={3}
+                              value={editingRedirects.value}
+                              onChange={(e) => setEditingRedirects({ id, value: e.target.value })}
+                              className="w-72 rounded-sm border border-border bg-background px-2 py-1 font-mono text-xs"
+                              placeholder="https://app.example.com/api/public/core/callback"
+                            />
+                            <button
+                              className="mono-label hover:text-foreground"
+                              onClick={() =>
+                                redirectMut.mutate({
+                                  app_id: id,
+                                  redirect_uris: editingRedirects.value.split(/[\n,]/),
+                                })
+                              }
+                            >
+                              Save
+                            </button>
+                            <button
+                              className="mono-label hover:text-foreground"
+                              onClick={() => setEditingRedirects(null)}
+                            >
+                              Cancel
+                            </button>
+                          </span>
+                        ) : (
+                          <button
+                            className="text-left hover:text-primary"
+                            onClick={() => setEditingRedirects({ id, value: uris.join("\n") })}
+                          >
+                            {uris.length ? (
+                              <span className="block whitespace-pre-line">{uris.join("\n")}</span>
+                            ) : (
+                              "—"
+                            )}
+                          </button>
+                        )}
+                      </Td>
                       <Td mono>{a.is_alacarte ? "yes" : "no"}</Td>
                       <Td>
                         <StatusTag value={a.is_active ? "active" : "disabled"} />
