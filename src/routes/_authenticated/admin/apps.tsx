@@ -8,6 +8,7 @@ import {
   listApps,
   revokeAppCredential,
   updateAppBaseUrl,
+  updateAppRedirectUris,
 } from "@/lib/core/admin.functions";
 import { Empty, PageHeader, Panel, StatusTag, Td, Th, fmt } from "@/components/console/primitives";
 
@@ -20,12 +21,14 @@ function Apps() {
   const create = useServerFn(createAppCredential);
   const revoke = useServerFn(revokeAppCredential);
   const setBaseUrl = useServerFn(updateAppBaseUrl);
+  const setRedirects = useServerFn(updateAppRedirectUris);
   const qc = useQueryClient();
 
   const { data, isLoading, error } = useQuery({ queryKey: ["admin-apps"], queryFn: () => fn({}) });
 
   const [issued, setIssued] = useState<{ app_id: string; token: string } | null>(null);
   const [editing, setEditing] = useState<{ id: string; value: string } | null>(null);
+  const [editingRedirects, setEditingRedirects] = useState<{ id: string; value: string } | null>(null);
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-apps"] });
 
@@ -50,12 +53,23 @@ function Apps() {
   const urlMut = useMutation({
     mutationFn: (v: { app_id: string; base_url: string }) => setBaseUrl({ data: v }),
     onSuccess: () => {
-      toast.success("Base URL updated");
+      toast.success("Base URL Updated");
       setEditing(null);
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const redirectMut = useMutation({
+    mutationFn: (v: { app_id: string; redirect_uris: string[] }) => setRedirects({ data: v }),
+    onSuccess: () => {
+      toast.success("Redirect URIs Updated");
+      setEditingRedirects(null);
+      invalidate();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
   if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
@@ -109,6 +123,7 @@ function Apps() {
                   <Th>App ID</Th>
                   <Th>Name</Th>
                   <Th>Base URL</Th>
+                  <Th>Redirect URIs</Th>
                   <Th>à la carte</Th>
                   <Th>Status</Th>
                   <Th>Actions</Th>
@@ -118,6 +133,11 @@ function Apps() {
                 {data.apps.map((a) => {
                   const id = a.id as string;
                   const isEditing = editing?.id === id;
+                  const manifest = (a.manifest as Record<string, unknown> | null) ?? {};
+                  const uris = Array.isArray(manifest["redirect_uris"])
+                    ? (manifest["redirect_uris"] as string[])
+                    : [];
+                  const isEditingUris = editingRedirects?.id === id;
                   return (
                     <tr key={id}>
                       <Td mono>{id}</Td>
@@ -151,6 +171,48 @@ function Apps() {
                             onClick={() => setEditing({ id, value: (a.base_url as string) ?? "" })}
                           >
                             {(a.base_url as string) || "—"}
+                          </button>
+                        )}
+                      </Td>
+                      <Td mono>
+                        {isEditingUris ? (
+                          <span className="flex items-start gap-2">
+                            <textarea
+                              autoFocus
+                              rows={3}
+                              value={editingRedirects.value}
+                              onChange={(e) => setEditingRedirects({ id, value: e.target.value })}
+                              className="w-72 rounded-sm border border-border bg-background px-2 py-1 font-mono text-xs"
+                              placeholder="https://app.example.com/api/public/core/callback"
+                            />
+                            <button
+                              className="mono-label hover:text-foreground"
+                              onClick={() =>
+                                redirectMut.mutate({
+                                  app_id: id,
+                                  redirect_uris: editingRedirects.value.split(/[\n,]/),
+                                })
+                              }
+                            >
+                              Save
+                            </button>
+                            <button
+                              className="mono-label hover:text-foreground"
+                              onClick={() => setEditingRedirects(null)}
+                            >
+                              Cancel
+                            </button>
+                          </span>
+                        ) : (
+                          <button
+                            className="text-left hover:text-primary"
+                            onClick={() => setEditingRedirects({ id, value: uris.join("\n") })}
+                          >
+                            {uris.length ? (
+                              <span className="block whitespace-pre-line">{uris.join("\n")}</span>
+                            ) : (
+                              "—"
+                            )}
                           </button>
                         )}
                       </Td>
