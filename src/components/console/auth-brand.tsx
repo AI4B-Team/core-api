@@ -23,7 +23,7 @@ export function BrandMark({
           style={branding?.accentColor ? { backgroundColor: branding.accentColor } : undefined}
         />
       )}
-      <span className="font-mono text-sm font-medium">{name.toLowerCase()}</span>
+      <span className="font-display text-base font-extrabold tracking-tight">{name}</span>
       {subtitle && <span className="mono-label">{subtitle}</span>}
     </div>
   );
@@ -32,7 +32,7 @@ export function BrandMark({
 export function BrandFooter({ branding }: { branding?: CoreBranding | null | undefined }) {
   return (
     <p className="mono-label mt-10">
-      secured by {(branding?.brandName ?? "Real Elite").toLowerCase()} core
+      Secured By {branding?.brandName ?? "Real Elite"} Core
       {branding?.supportEmail ? ` · ${branding.supportEmail}` : ""}
     </p>
   );

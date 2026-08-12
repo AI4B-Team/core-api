@@ -33,7 +33,6 @@ function Authorize() {
   const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
-    document.documentElement.classList.add("dark");
   }, []);
 
   const { data, isLoading } = useQuery({
