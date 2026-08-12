@@ -57,7 +57,7 @@ function Apps() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
 
   function issue(appId: string) {

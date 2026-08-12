@@ -16,7 +16,7 @@ function Overview() {
     refetchInterval: 30_000,
   });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
   if (!data) return null;
 

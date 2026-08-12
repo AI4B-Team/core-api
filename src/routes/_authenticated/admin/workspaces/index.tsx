@@ -12,7 +12,7 @@ function Workspaces() {
   const fn = useServerFn(listWorkspaces);
   const { data, isLoading, error } = useQuery({ queryKey: ["admin-workspaces"], queryFn: () => fn({}) });
 
-  if (isLoading) return <p className="mono-label">loading…</p>;
+  if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
 
   return (
