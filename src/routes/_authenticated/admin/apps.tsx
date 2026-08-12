@@ -123,6 +123,7 @@ function Apps() {
                   <Th>App ID</Th>
                   <Th>Name</Th>
                   <Th>Base URL</Th>
+                  <Th>Redirect URIs</Th>
                   <Th>à la carte</Th>
                   <Th>Status</Th>
                   <Th>Actions</Th>
