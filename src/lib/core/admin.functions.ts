@@ -290,3 +290,150 @@ export const updateAppBaseUrl = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** Accounts and legal entities available when provisioning a workspace. */
+export const listOrgTree = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const [accounts, entities] = await Promise.all([
+      db.from("accounts").select("id, name, type, billing_email, created_at").order("created_at"),
+      db.from("legal_entities").select("id, account_id, legal_name, entity_type, country").order("created_at"),
+    ]);
+    return { accounts: accounts.data ?? [], entities: entities.data ?? [] };
+  });
+
+export const createAccount = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { name: string; type: string; billing_email: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const name = data.name.trim();
+    const billing_email = data.billing_email.trim();
+    if (!name) throw new Error("Name is required");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(billing_email)) throw new Error("A valid billing email is required");
+    const { data: row, error } = await db
+      .from("accounts")
+      .insert({ name, type: data.type || "direct", billing_email })
+      .select("id, name, type, billing_email")
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const createLegalEntity = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { account_id: string; legal_name: string; ein?: string; entity_type?: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const legal_name = data.legal_name.trim();
+    if (!data.account_id) throw new Error("An account is required");
+    if (!legal_name) throw new Error("Legal name is required");
+    const { data: row, error } = await db
+      .from("legal_entities")
+      .insert({
+        account_id: data.account_id,
+        legal_name,
+        ein: data.ein?.trim() || null,
+        entity_type: data.entity_type?.trim() || null,
+      })
+      .select("id, account_id, legal_name, entity_type")
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const createWorkspace = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: {
+      account_id: string;
+      legal_entity_id: string;
+      name: string;
+      slug: string;
+      timezone?: string;
+      industry?: string;
+    }) => d,
+  )
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const name = data.name.trim();
+    const slug = data.slug.trim().toLowerCase();
+    if (!name) throw new Error("Name is required");
+    if (!/^[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$/.test(slug))
+      throw new Error("Slug must be lowercase letters, numbers and hyphens");
+
+    const { data: le } = await db
+      .from("legal_entities")
+      .select("id, account_id")
+      .eq("id", data.legal_entity_id)
+      .maybeSingle();
+    if (!le) throw new Error("Legal entity not found");
+    if (le.account_id !== data.account_id)
+      throw new Error("The legal entity must belong to the selected account");
+
+    const { data: clash } = await db
+      .from("workspaces")
+      .select("id")
+      .eq("account_id", data.account_id)
+      .eq("slug", slug)
+      .maybeSingle();
+    if (clash) throw new Error("That slug is already used in this account");
+
+    const { data: row, error } = await db
+      .from("workspaces")
+      .insert({
+        account_id: data.account_id,
+        legal_entity_id: data.legal_entity_id,
+        name,
+        slug,
+        timezone: data.timezone?.trim() || "America/New_York",
+        industry: data.industry?.trim() || null,
+      })
+      .select("id, name, slug")
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const grantEntitlement = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { workspace_id: string; app_id: string; plan?: string; status?: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const { data: existing } = await db
+      .from("entitlements")
+      .select("id")
+      .eq("workspace_id", data.workspace_id)
+      .eq("app_id", data.app_id)
+      .maybeSingle();
+    const payload = { plan: data.plan?.trim() || "standard", status: data.status?.trim() || "active" };
+    if (existing) {
+      const { error } = await db.from("entitlements").update(payload).eq("id", existing.id);
+      if (error) throw new Error(error.message);
+      return { id: existing.id, ...payload };
+    }
+    const { data: row, error } = await db
+      .from("entitlements")
+      .insert({ workspace_id: data.workspace_id, app_id: data.app_id, ...payload })
+      .select("id, app_id, plan, status")
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const revokeEntitlement = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const { error } = await db.from("entitlements").update({ status: "revoked" }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
