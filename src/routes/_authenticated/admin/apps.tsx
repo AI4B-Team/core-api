@@ -133,6 +133,11 @@ function Apps() {
                 {data.apps.map((a) => {
                   const id = a.id as string;
                   const isEditing = editing?.id === id;
+                  const manifest = (a.manifest as Record<string, unknown> | null) ?? {};
+                  const uris = Array.isArray(manifest["redirect_uris"])
+                    ? (manifest["redirect_uris"] as string[])
+                    : [];
+                  const isEditingUris = editingRedirects?.id === id;
                   return (
                     <tr key={id}>
                       <Td mono>{id}</Td>
