@@ -232,18 +232,12 @@ export const listContacts = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
-async function assertStaff(userId: string) {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data: isStaff } = await supabaseAdmin.rpc("is_staff", { _uid: userId });
-  if (!isStaff) throw new Error("Forbidden: staff access required");
-  return supabaseAdmin;
-}
-
 /** Issues a service credential. The plaintext token is returned once and never stored. */
 export const createAppCredential = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { app_id: string; name: string }) => d)
   .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
     const db = await assertStaff(context.userId);
     const { sha256Hex } = await import("./jwt.server");
 
@@ -274,6 +268,7 @@ export const revokeAppCredential = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { id: string }) => d)
   .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
     const db = await assertStaff(context.userId);
     const { error } = await db
       .from("app_credentials")
@@ -287,6 +282,7 @@ export const updateAppBaseUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { app_id: string; base_url: string }) => d)
   .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
     const db = await assertStaff(context.userId);
     const url = data.base_url.trim();
     if (!/^https?:\/\/.+/i.test(url)) throw new Error("base_url must be an http(s) URL");
