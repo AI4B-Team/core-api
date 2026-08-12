@@ -59,22 +59,22 @@ function Index() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
             <div className="size-2.5 rounded-full bg-primary" />
-            <span className="font-mono text-sm font-medium tracking-tight">core</span>
-            <span className="mono-label hidden sm:inline">realelite platform</span>
+            <span className="font-display text-base font-extrabold tracking-tight">Core</span>
+            <span className="mono-label hidden sm:inline">Real Elite Platform</span>
           </div>
           <div className="flex items-center gap-6">
             <Link
               to="/auth"
               search={{ redirect: undefined, app_id: undefined, account: undefined }}
-              className="mono-label hover:text-foreground"
+              className="text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
-              sign in
+              Sign In
             </Link>
             <Link
               to="/admin"
-              className="rounded-sm bg-primary px-3 py-1.5 font-mono text-xs font-medium text-primary-foreground"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              console
+              Console
             </Link>
           </div>
         </div>
@@ -82,9 +82,9 @@ function Index() {
 
       <section className="grid-bg border-b border-border">
         <div className="mx-auto max-w-6xl px-6 py-24">
-          <p className="mono-label">infrastructure · not a product</p>
-          <h1 className="mt-6 max-w-3xl text-5xl leading-[1.05] font-semibold sm:text-6xl">
-            The service every Real Elite app is built on top of.
+          <p className="eyebrow">Infrastructure · Not A Product</p>
+          <h1 className="mt-6 max-w-3xl text-5xl leading-[1.02] font-extrabold tracking-[-0.035em] sm:text-6xl">
+            The Service Every Real Elite App Is Built On Top Of.
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground">
             Core owns identity, entitlements, canonical contacts, compliance decisions and credits.
@@ -93,22 +93,22 @@ function Index() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               to="/admin"
-              className="rounded-sm bg-primary px-5 py-2.5 font-mono text-sm font-medium text-primary-foreground"
+              className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              open console
+              Open Console
             </Link>
             <a
               href="#surfaces"
-              className="rounded-sm border border-border px-5 py-2.5 font-mono text-sm text-foreground hover:bg-accent"
+              className="rounded-lg border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              what it owns
+              What It Owns
             </a>
           </div>
         </div>
       </section>
 
       <section id="surfaces" className="mx-auto max-w-6xl px-6 py-20">
-        <div className="grid gap-px overflow-hidden rounded border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {surfaces.map((s) => (
             <div key={s.code} className="bg-surface p-6">
               <span className="font-mono text-xs text-primary">{s.code}</span>
@@ -121,8 +121,8 @@ function Index() {
 
       <section className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <p className="mono-label">the chokepoint</p>
-          <pre className="mt-4 overflow-x-auto rounded border border-border bg-surface p-5 font-mono text-xs leading-relaxed text-muted-foreground">
+          <p className="eyebrow">The Chokepoint</p>
+          <pre className="mt-4 overflow-x-auto rounded-2xl border border-border bg-surface p-5 font-mono text-xs leading-relaxed text-muted-foreground">
 {`POST /api/public/v1/messages/send
   -> policy.assertCanSend(workspace, contact, channel)
        suppression · quiet hours · line type · frequency cap · brand status
@@ -141,7 +141,7 @@ function Index() {
 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-8">
-          <span className="mono-label">core · api.realelite.com</span>
+          <span className="mono-label">Core · api.realelite.com</span>
           <span className="mono-label">auth.realelite.com</span>
         </div>
       </footer>
