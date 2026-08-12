@@ -8,6 +8,7 @@ import {
   listApps,
   revokeAppCredential,
   updateAppBaseUrl,
+  updateAppRedirectUris,
 } from "@/lib/core/admin.functions";
 import { Empty, PageHeader, Panel, StatusTag, Td, Th, fmt } from "@/components/console/primitives";
 
