@@ -40,6 +40,7 @@ import { Route as ApiPublicV1KnowledgeDocumentsRouteImport } from './routes/api/
 import { Route as ApiPublicV1KnowledgeSearchRouteImport } from './routes/api/public/v1/knowledge/search'
 import { Route as ApiPublicV1MessagesSendRouteImport } from './routes/api/public/v1/messages/send'
 import { Route as ApiPublicV1PolicyAssertRouteImport } from './routes/api/public/v1/policy/assert'
+import { Route as ApiPublicV1PolicyAssertBulkRouteImport } from './routes/api/public/v1/policy/assert-bulk'
 import { Route as ApiPublicV1PolicyRecordRouteImport } from './routes/api/public/v1/policy/record'
 import { Route as ApiPublicV1CallsIdIndexRouteImport } from './routes/api/public/v1/calls/$id/index'
 import { Route as ApiPublicV1CallsIdAssistRouteImport } from './routes/api/public/v1/calls/$id/assist'
@@ -214,6 +215,12 @@ const ApiPublicV1PolicyAssertRoute = ApiPublicV1PolicyAssertRouteImport.update({
   path: '/api/public/v1/policy/assert',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1PolicyAssertBulkRoute =
+  ApiPublicV1PolicyAssertBulkRouteImport.update({
+    id: '/api/public/v1/policy/assert-bulk',
+    path: '/api/public/v1/policy/assert-bulk',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1PolicyRecordRoute = ApiPublicV1PolicyRecordRouteImport.update({
   id: '/api/public/v1/policy/record',
   path: '/api/public/v1/policy/record',
@@ -273,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/assert-bulk': typeof ApiPublicV1PolicyAssertBulkRoute
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
@@ -309,6 +317,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/assert-bulk': typeof ApiPublicV1PolicyAssertBulkRoute
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
@@ -348,6 +357,7 @@ export interface FileRoutesById {
   '/api/public/v1/knowledge/search': typeof ApiPublicV1KnowledgeSearchRoute
   '/api/public/v1/messages/send': typeof ApiPublicV1MessagesSendRoute
   '/api/public/v1/policy/assert': typeof ApiPublicV1PolicyAssertRoute
+  '/api/public/v1/policy/assert-bulk': typeof ApiPublicV1PolicyAssertBulkRoute
   '/api/public/v1/policy/record': typeof ApiPublicV1PolicyRecordRoute
   '/api/public/v1/calls/': typeof ApiPublicV1CallsIndexRoute
   '/api/public/v1/calls/$id/assist': typeof ApiPublicV1CallsIdAssistRoute
@@ -387,6 +397,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/assert-bulk'
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls/'
     | '/api/public/v1/calls/$id/assist'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/assert-bulk'
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls'
     | '/api/public/v1/calls/$id/assist'
@@ -461,6 +473,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/knowledge/search'
     | '/api/public/v1/messages/send'
     | '/api/public/v1/policy/assert'
+    | '/api/public/v1/policy/assert-bulk'
     | '/api/public/v1/policy/record'
     | '/api/public/v1/calls/'
     | '/api/public/v1/calls/$id/assist'
@@ -490,6 +503,7 @@ export interface RootRouteChildren {
   ApiPublicV1KnowledgeSearchRoute: typeof ApiPublicV1KnowledgeSearchRoute
   ApiPublicV1MessagesSendRoute: typeof ApiPublicV1MessagesSendRoute
   ApiPublicV1PolicyAssertRoute: typeof ApiPublicV1PolicyAssertRoute
+  ApiPublicV1PolicyAssertBulkRoute: typeof ApiPublicV1PolicyAssertBulkRoute
   ApiPublicV1PolicyRecordRoute: typeof ApiPublicV1PolicyRecordRoute
   ApiPublicV1CallsIndexRoute: typeof ApiPublicV1CallsIndexRoute
   ApiPublicV1CallsIdAssistRoute: typeof ApiPublicV1CallsIdAssistRoute
@@ -717,6 +731,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1PolicyAssertRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/policy/assert-bulk': {
+      id: '/api/public/v1/policy/assert-bulk'
+      path: '/api/public/v1/policy/assert-bulk'
+      fullPath: '/api/public/v1/policy/assert-bulk'
+      preLoaderRoute: typeof ApiPublicV1PolicyAssertBulkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/policy/record': {
       id: '/api/public/v1/policy/record'
       path: '/api/public/v1/policy/record'
@@ -816,6 +837,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1KnowledgeSearchRoute: ApiPublicV1KnowledgeSearchRoute,
   ApiPublicV1MessagesSendRoute: ApiPublicV1MessagesSendRoute,
   ApiPublicV1PolicyAssertRoute: ApiPublicV1PolicyAssertRoute,
+  ApiPublicV1PolicyAssertBulkRoute: ApiPublicV1PolicyAssertBulkRoute,
   ApiPublicV1PolicyRecordRoute: ApiPublicV1PolicyRecordRoute,
   ApiPublicV1CallsIndexRoute: ApiPublicV1CallsIndexRoute,
   ApiPublicV1CallsIdAssistRoute: ApiPublicV1CallsIdAssistRoute,
@@ -826,3 +848,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
