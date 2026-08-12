@@ -231,3 +231,66 @@ export const listContacts = createServerFn({ method: "GET" })
       .limit(100);
     return data ?? [];
   });
+
+async function assertStaff(userId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: isStaff } = await supabaseAdmin.rpc("is_staff", { _uid: userId });
+  if (!isStaff) throw new Error("Forbidden: staff access required");
+  return supabaseAdmin;
+}
+
+/** Issues a service credential. The plaintext token is returned once and never stored. */
+export const createAppCredential = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { app_id: string; name: string }) => d)
+  .handler(async ({ data, context }) => {
+    const db = await assertStaff(context.userId);
+    const { sha256Hex } = await import("./jwt.server");
+
+    const bytes = new Uint8Array(32);
+    crypto.getRandomValues(bytes);
+    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+    const token = `core_sk_${hex}`;
+    const token_prefix = token.slice(0, 16);
+    const token_hash = await sha256Hex(token);
+
+    const { data: row, error } = await db
+      .from("app_credentials")
+      .insert({
+        app_id: data.app_id,
+        name: data.name.trim() || "service credential",
+        token_prefix,
+        token_hash,
+        is_active: true,
+      })
+      .select("id, app_id, name, token_prefix, is_active, last_used_at, created_at")
+      .single();
+    if (error) throw new Error(error.message);
+
+    return { credential: row, token };
+  });
+
+export const revokeAppCredential = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => d)
+  .handler(async ({ data, context }) => {
+    const db = await assertStaff(context.userId);
+    const { error } = await db
+      .from("app_credentials")
+      .update({ is_active: false })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const updateAppBaseUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { app_id: string; base_url: string }) => d)
+  .handler(async ({ data, context }) => {
+    const db = await assertStaff(context.userId);
+    const url = data.base_url.trim();
+    if (!/^https?:\/\/.+/i.test(url)) throw new Error("base_url must be an http(s) URL");
+    const { error } = await db.from("apps").update({ base_url: url }).eq("id", data.app_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
