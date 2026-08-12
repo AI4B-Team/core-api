@@ -100,13 +100,13 @@ function Workspaces() {
       <PageHeader label="Identity" title="Workspaces" />
 
       <div className="mb-4 flex flex-wrap gap-2">
-        <button className="btn-primary" onClick={() => setForm(form === "account" ? null : "account")}>
+        <button className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50" onClick={() => setForm(form === "account" ? null : "account")}>
           New Account
         </button>
-        <button className="btn-secondary" onClick={() => setForm(form === "entity" ? null : "entity")}>
+        <button className="rounded-lg border border-border px-3 py-2 text-sm font-semibold hover:bg-accent" onClick={() => setForm(form === "entity" ? null : "entity")}>
           New Legal Entity
         </button>
-        <button className="btn-secondary" onClick={() => setForm(form === "workspace" ? null : "workspace")}>
+        <button className="rounded-lg border border-border px-3 py-2 text-sm font-semibold hover:bg-accent" onClick={() => setForm(form === "workspace" ? null : "workspace")}>
           New Workspace
         </button>
       </div>
@@ -132,7 +132,7 @@ function Workspaces() {
             </Field>
           </div>
           <div className="flex gap-3 px-4 pb-4">
-            <button className="btn-primary" disabled={acctMut.isPending} onClick={() => acctMut.mutate()}>
+            <button className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50" disabled={acctMut.isPending} onClick={() => acctMut.mutate()}>
               Create Account
             </button>
             <button className="mono-label hover:text-foreground" onClick={() => setForm(null)}>
@@ -178,7 +178,7 @@ function Workspaces() {
             </Field>
           </div>
           <div className="flex gap-3 px-4 pb-4">
-            <button className="btn-primary" disabled={entityMut.isPending} onClick={() => entityMut.mutate()}>
+            <button className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50" disabled={entityMut.isPending} onClick={() => entityMut.mutate()}>
               Create Legal Entity
             </button>
             <button className="mono-label hover:text-foreground" onClick={() => setForm(null)}>
@@ -233,7 +233,7 @@ function Workspaces() {
             </Field>
           </div>
           <div className="flex gap-3 px-4 pb-4">
-            <button className="btn-primary" disabled={wsMut.isPending} onClick={() => wsMut.mutate()}>
+            <button className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50" disabled={wsMut.isPending} onClick={() => wsMut.mutate()}>
               Create Workspace
             </button>
             <button className="mono-label hover:text-foreground" onClick={() => setForm(null)}>
