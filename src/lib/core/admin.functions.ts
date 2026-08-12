@@ -291,6 +291,30 @@ export const updateAppBaseUrl = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/** Edit the redirect_uris allow-list stored on an app's manifest. */
+export const updateAppRedirectUris = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { app_id: string; redirect_uris: string[] }) => d)
+  .handler(async ({ data, context }) => {
+    const { assertStaff } = await import("./staff.server");
+    const db = await assertStaff(context.userId);
+    const uris = data.redirect_uris.map((u) => u.trim()).filter(Boolean);
+    for (const u of uris) {
+      if (!/^https?:\/\/.+/i.test(u)) throw new Error(`Invalid redirect URI: ${u}`);
+    }
+    const { data: app, error: readErr } = await db
+      .from("apps")
+      .select("manifest")
+      .eq("id", data.app_id)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!app) throw new Error("App not found");
+    const manifest = { ...((app.manifest as Record<string, unknown>) ?? {}), redirect_uris: uris };
+    const { error } = await db.from("apps").update({ manifest }).eq("id", data.app_id);
+    if (error) throw new Error(error.message);
+    return { ok: true, redirect_uris: uris };
+  });
+
 /** Accounts and legal entities available when provisioning a workspace. */
 export const listOrgTree = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
