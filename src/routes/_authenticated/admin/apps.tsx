@@ -41,7 +41,7 @@ function Apps() {
   const revokeMut = useMutation({
     mutationFn: (id: string) => revoke({ data: { id } }),
     onSuccess: () => {
-      toast.success("credential revoked");
+      toast.success("Credential revoked");
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -50,7 +50,7 @@ function Apps() {
   const urlMut = useMutation({
     mutationFn: (v: { app_id: string; base_url: string }) => setBaseUrl({ data: v }),
     onSuccess: () => {
-      toast.success("base url updated");
+      toast.success("Base URL updated");
       setEditing(null);
       invalidate();
     },
@@ -86,13 +86,13 @@ function Apps() {
               className="mono-label hover:text-foreground"
               onClick={async () => {
                 await navigator.clipboard.writeText(issued.token);
-                toast.success("copied to clipboard");
+                toast.success("Copied to clipboard");
               }}
             >
-              copy
+              Copy
             </button>
             <button className="mono-label hover:text-foreground" onClick={() => setIssued(null)}>
-              dismiss
+              Dismiss
             </button>
           </div>
         </section>
@@ -136,13 +136,13 @@ function Apps() {
                               className="mono-label hover:text-foreground"
                               onClick={() => urlMut.mutate({ app_id: id, base_url: editing.value })}
                             >
-                              save
+                              Save
                             </button>
                             <button
                               className="mono-label hover:text-foreground"
                               onClick={() => setEditing(null)}
                             >
-                              cancel
+                              Cancel
                             </button>
                           </span>
                         ) : (
@@ -164,7 +164,7 @@ function Apps() {
                           disabled={createMut.isPending}
                           onClick={() => issue(id)}
                         >
-                          issue credential
+                          Issue Credential
                         </button>
                       </Td>
                     </tr>
@@ -212,7 +212,7 @@ function Apps() {
                               revokeMut.mutate(c.id as string);
                           }}
                         >
-                          revoke
+                          Revoke
                         </button>
                       ) : (
                         <span className="mono-label">—</span>
