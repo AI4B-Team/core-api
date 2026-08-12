@@ -53,12 +53,23 @@ function Apps() {
   const urlMut = useMutation({
     mutationFn: (v: { app_id: string; base_url: string }) => setBaseUrl({ data: v }),
     onSuccess: () => {
-      toast.success("Base URL updated");
+      toast.success("Base URL Updated");
       setEditing(null);
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const redirectMut = useMutation({
+    mutationFn: (v: { app_id: string; redirect_uris: string[] }) => setRedirects({ data: v }),
+    onSuccess: () => {
+      toast.success("Redirect URIs Updated");
+      setEditingRedirects(null);
+      invalidate();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
   if (isLoading) return <p className="mono-label">Loading…</p>;
   if (error) return <p className="text-sm text-destructive">{(error as Error).message}</p>;
