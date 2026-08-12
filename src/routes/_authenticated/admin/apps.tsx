@@ -21,12 +21,14 @@ function Apps() {
   const create = useServerFn(createAppCredential);
   const revoke = useServerFn(revokeAppCredential);
   const setBaseUrl = useServerFn(updateAppBaseUrl);
+  const setRedirects = useServerFn(updateAppRedirectUris);
   const qc = useQueryClient();
 
   const { data, isLoading, error } = useQuery({ queryKey: ["admin-apps"], queryFn: () => fn({}) });
 
   const [issued, setIssued] = useState<{ app_id: string; token: string } | null>(null);
   const [editing, setEditing] = useState<{ id: string; value: string } | null>(null);
+  const [editingRedirects, setEditingRedirects] = useState<{ id: string; value: string } | null>(null);
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-apps"] });
 
