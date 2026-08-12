@@ -134,7 +134,9 @@ function AuthScreen() {
         <BrandMark branding={branding} />
         <div>
           <h2 className="max-w-sm text-3xl leading-tight font-semibold">
-            One Sign-In For Every {brandName} Application.
+            One Sign-In For Every
+            <br />
+            {brandName} Application.
           </h2>
           <p className="mt-4 max-w-sm text-sm text-muted-foreground">
             {branding?.appName
