@@ -155,10 +155,10 @@ function AuthScreen() {
           </p>
           <h1 className="mt-3 text-2xl font-semibold">
             {mode === "signup"
-              ? `Create your ${brandName} account`
+              ? `Create Your ${brandName} Account`
               : branding?.appName
-                ? `Continue to ${branding.appName}`
-                : `Sign in to ${brandName}`}
+                ? `Continue To ${branding.appName}`
+                : `Sign In To ${brandName}`}
           </h1>
 
           {linkSent ? (

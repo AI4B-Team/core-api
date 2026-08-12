@@ -94,7 +94,7 @@ function Authorize() {
   return (
     <Shell branding={branding}>
       <p className="mono-label">Choose Workspace</p>
-      <h1 className="mt-3 text-2xl font-semibold">Continue to {data.app.name}</h1>
+      <h1 className="mt-3 text-2xl font-semibold">Continue To {data.app.name}</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Pick the workspace {data.app.name} should work inside. You will be returned to{" "}
         <span className="font-mono text-foreground">{targetHost}</span> with a single-use code.
