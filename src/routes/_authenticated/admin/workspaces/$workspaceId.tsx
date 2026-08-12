@@ -1,7 +1,9 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
-import { getWorkspaceDetail } from "@/lib/core/admin.functions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import { getWorkspaceDetail, grantEntitlement, listApps, revokeEntitlement } from "@/lib/core/admin.functions";
 import { Empty, PageHeader, Panel, Stat, StatusTag, Td, Th, fmt } from "@/components/console/primitives";
 
 export const Route = createFileRoute("/_authenticated/admin/workspaces/$workspaceId")({
