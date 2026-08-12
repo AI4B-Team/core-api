@@ -24,7 +24,7 @@ function Overview() {
 
   return (
     <>
-      <PageHeader label="Core" title="Platform overview" />
+      <PageHeader label="Core" title="Platform Overview" />
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Accounts" value={c.accounts} />

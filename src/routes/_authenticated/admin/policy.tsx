@@ -24,7 +24,7 @@ function PolicyChecks() {
     <>
       <PageHeader
         label="Chokepoint"
-        title="Policy checks"
+        title="Policy Checks"
         action={
           <div className="flex gap-1">
             {filters.map((f) => (

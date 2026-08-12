@@ -16,7 +16,7 @@ function Compliance() {
 
   return (
     <>
-      <PageHeader label="10dlc · suppression" title="Compliance" />
+      <PageHeader label="10dlc · Suppression" title="Compliance" />
 
       <div className="grid gap-3">
         <Panel title="Brands">

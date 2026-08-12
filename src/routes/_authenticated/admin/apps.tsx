@@ -68,7 +68,7 @@ function Apps() {
 
   return (
     <>
-      <PageHeader label="Registry" title="Apps and service credentials" />
+      <PageHeader label="Registry" title="Apps and Service Credentials" />
 
       {issued && (
         <section className="panel mb-3 border-warning/50 p-4">
