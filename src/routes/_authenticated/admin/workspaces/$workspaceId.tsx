@@ -13,9 +13,37 @@ export const Route = createFileRoute("/_authenticated/admin/workspaces/$workspac
 function WorkspaceDetail() {
   const { workspaceId } = useParams({ from: "/_authenticated/admin/workspaces/$workspaceId" });
   const fn = useServerFn(getWorkspaceDetail);
+  const apps = useServerFn(listApps);
+  const grant = useServerFn(grantEntitlement);
+  const revoke = useServerFn(revokeEntitlement);
+  const qc = useQueryClient();
+  const [pick, setPick] = useState({ app_id: "", plan: "standard" });
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["admin-workspace", workspaceId],
     queryFn: () => fn({ data: { workspaceId } }),
+  });
+  const { data: appList } = useQuery({ queryKey: ["admin-apps"], queryFn: () => apps({}) });
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["admin-workspace", workspaceId] });
+
+  const grantMut = useMutation({
+    mutationFn: () => grant({ data: { workspace_id: workspaceId, app_id: pick.app_id, plan: pick.plan, status: "active" } }),
+    onSuccess: () => {
+      toast.success("Entitlement Granted");
+      setPick({ app_id: "", plan: "standard" });
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const revokeMut = useMutation({
+    mutationFn: (id: string) => revoke({ data: { id } }),
+    onSuccess: () => {
+      toast.success("Entitlement Revoked");
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   if (isLoading) return <p className="mono-label">Loading…</p>;
@@ -25,6 +53,7 @@ function WorkspaceDetail() {
 
   const le = ws["legal_entities"] as Record<string, unknown> | null;
   const acct = ws["accounts"] as Record<string, unknown> | null;
+  const inputClass = "rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary";
 
   return (
     <>
@@ -34,11 +63,34 @@ function WorkspaceDetail() {
         <Stat label="Account" value={(acct?.["name"] as string) ?? "—"} />
         <Stat label="Legal Entity" value={(le?.["legal_name"] as string) ?? "—"} />
         <Stat label="Brand Status" value={(le?.["brand_status"] as string) ?? "—"} />
-        <Stat label="Autonomy Level" value={String(data?.policy?.autonomy_level ?? "default")} />
+        <Stat label="Workspace ID" value={workspaceId} />
       </div>
 
       <div className="grid gap-3 lg:grid-cols-2">
         <Panel title="Entitlements">
+          <div className="flex flex-wrap items-center gap-2 p-4">
+            <select className={inputClass} value={pick.app_id} onChange={(e) => setPick({ ...pick, app_id: e.target.value })}>
+              <option value="">Select App…</option>
+              {(appList?.apps ?? []).map((a) => (
+                <option key={a.id as string} value={a.id as string}>
+                  {a.name as string}
+                </option>
+              ))}
+            </select>
+            <input
+              className={inputClass}
+              value={pick.plan}
+              onChange={(e) => setPick({ ...pick, plan: e.target.value })}
+              placeholder="Plan"
+            />
+            <button
+              className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+              disabled={!pick.app_id || grantMut.isPending}
+              onClick={() => grantMut.mutate()}
+            >
+              Grant App
+            </button>
+          </div>
           {!data?.entitlements.length ? (
             <Empty>No apps entitled.</Empty>
           ) : (
@@ -48,6 +100,7 @@ function WorkspaceDetail() {
                   <Th>App</Th>
                   <Th>Plan</Th>
                   <Th>Status</Th>
+                  <Th>Actions</Th>
                 </tr>
               </thead>
               <tbody>
@@ -58,12 +111,26 @@ function WorkspaceDetail() {
                     <Td>
                       <StatusTag value={e.status as string} />
                     </Td>
+                    <Td>
+                      {e.status === "revoked" ? (
+                        <span className="mono-label">—</span>
+                      ) : (
+                        <button
+                          className="mono-label hover:text-destructive"
+                          disabled={revokeMut.isPending}
+                          onClick={() => revokeMut.mutate(e.id as string)}
+                        >
+                          Revoke
+                        </button>
+                      )}
+                    </Td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
         </Panel>
+
 
         <Panel title="Credit Balances">
           {!data?.balances.length ? (
