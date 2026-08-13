@@ -44,12 +44,18 @@ export const Route = createFileRoute("/api/public/v1/auth/token")({
           .eq("code_hash", codeHash);
 
         const token = await issueAccessToken(db, row.user_id as string, row.app_id as string, row.workspace_id as string);
+        if (!token) return apiError("forbidden", 403);
         return json(token);
       },
     },
   },
 });
 
+/**
+ * Mints a workspace-scoped access token. Membership and an active entitlement
+ * for the requesting app are re-verified on every issuance, so a stale code or
+ * refresh token can never outlive access being taken away.
+ */
 export async function issueAccessToken(
   db: Awaited<ReturnType<typeof getAdmin>>,
   userId: string,
@@ -60,7 +66,8 @@ export async function issueAccessToken(
     .from("workspaces")
     .select("id, account_id, legal_entity_id")
     .eq("id", workspaceId)
-    .single();
+    .maybeSingle();
+  if (!workspace) return null;
 
   const { data: membership } = await db
     .from("memberships")
@@ -68,12 +75,15 @@ export async function issueAccessToken(
     .eq("user_id", userId)
     .eq("workspace_id", workspaceId)
     .maybeSingle();
+  if (!membership) return null;
 
   const { data: entitlements } = await db
     .from("entitlements")
     .select("app_id")
     .eq("workspace_id", workspaceId)
     .in("status", ["active", "trialing"]);
+  if (!(entitlements ?? []).some((e) => e.app_id === appId)) return null;
+
 
   const accessToken = await signJwt(
     {

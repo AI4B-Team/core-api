@@ -137,16 +137,18 @@ export async function assertPolicy(
 
   const messagingAction = input.action === "send" || input.action === "call";
 
-  // 1. Suppression
+  // 1. Suppression. Multiple rows can match (channel-specific plus 'all'), so
+  //    never use maybeSingle here — a multi-row error would silently pass.
   if (input.identifier) {
     const channels = [input.channel ?? "sms", "all"];
-    const { data: hit } = await db
+    const { data: hits } = await db
       .from("suppressions")
       .select("id, reason, channel")
       .eq("legal_entity_id", legalEntityId)
       .eq("identifier", input.identifier)
       .in("channel", channels)
-      .maybeSingle();
+      .limit(1);
+    const hit = (hits ?? [])[0];
     if (hit) deny("suppression", `Suppressed for this entity (${hit.reason})`);
     else pass("suppression");
   } else {
@@ -159,19 +161,23 @@ export async function assertPolicy(
     skip("litigator_list", "litigator scrub provider not configured");
   }
 
-  // 4. Line type
+  // 4. Line type. The same number can belong to several contacts in one entity;
+  //    any blocked line type on that number denies.
   if (!deniedBy && messagingAction && input.identifier) {
-    const { data: phone } = await db
+    const { data: phones } = await db
       .from("contact_phones")
       .select("line_type")
       .eq("legal_entity_id", legalEntityId)
       .eq("e164", input.identifier)
-      .maybeSingle();
-    const lineType = phone?.line_type ?? null;
-    if (lineType && merged.block_line_types.includes(lineType))
-      deny("line_type", `${lineType} numbers are blocked for this workspace`);
-    else pass("line_type", lineType ?? "unknown");
+      .limit(20);
+    const lineTypes = (phones ?? [])
+      .map((p) => p.line_type as string | null)
+      .filter((t): t is string => Boolean(t));
+    const blocked = lineTypes.find((t) => merged.block_line_types.includes(t));
+    if (blocked) deny("line_type", `${blocked} numbers are blocked for this workspace`);
+    else pass("line_type", lineTypes[0] ?? "unknown");
   }
+
 
   // 5. Quiet hours in the contact's local time
   if (!deniedBy && messagingAction) {
@@ -193,7 +199,8 @@ export async function assertPolicy(
     else pass("quiet_hours", `${hour}:00 ${tz}`);
   }
 
-  // 6. Daily per-contact frequency cap
+  // 6. Daily per-contact frequency cap. Messages that never left Core
+  //    (failed / rejected) do not consume the contact's daily allowance.
   if (!deniedBy && messagingAction && input.contactId) {
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { count } = await db
@@ -202,28 +209,37 @@ export async function assertPolicy(
       .eq("workspace_id", input.workspaceId)
       .eq("direction", "outbound")
       .gte("created_at", since)
-      .eq("to_identifier", input.identifier ?? "");
+      .eq("to_identifier", input.identifier ?? "")
+      .not("status", "in", "(failed,rejected)");
     if ((count ?? 0) >= merged.daily_cap_per_contact)
       deny("frequency_cap", `${count} outbound in 24h, cap is ${merged.daily_cap_per_contact}`);
     else pass("frequency_cap", `${count ?? 0}/${merged.daily_cap_per_contact}`);
   }
 
-  // 7. Brand and campaign status
+  // 7. Brand and campaign status. An entity may hold more than one brand
+  //    record; a verified one satisfies the rule.
   if (!deniedBy && messagingAction && merged.require_verified_brand) {
-    const { data: brand } = await db
+    const { data: brands } = await db
       .from("brands")
       .select("id, status")
       .eq("legal_entity_id", legalEntityId)
-      .maybeSingle();
+      .limit(20);
+    const brand =
+      (brands ?? []).find((b) => b.status === "verified") ?? (brands ?? [])[0] ?? null;
     if (!brand) deny("brand_status", "no 10DLC brand registered for this legal entity");
     else if (brand.status !== "verified") deny("brand_status", `brand status is ${brand.status}`);
     else {
-      const { data: campaign } = await db
+      const { data: campaigns } = await db
         .from("campaigns_10dlc")
         .select("id, status")
         .eq("brand_id", brand.id)
         .eq("app_id", input.appId)
-        .maybeSingle();
+        .limit(20);
+      const campaign =
+        (campaigns ?? []).find((c) => c.status === "active" || c.status === "verified") ??
+        (campaigns ?? [])[0] ??
+        null;
+
       if (!campaign) deny("campaign_status", `no 10DLC campaign for app ${input.appId}`);
       else if (campaign.status !== "active" && campaign.status !== "verified")
         deny("campaign_status", `campaign status is ${campaign.status}`);
@@ -303,14 +319,17 @@ export async function assertCanRecord(
   if (!workspace) throw new Error("workspace_not_found");
   const legalEntityId = workspace.legal_entity_id as string;
 
-  // Suppression still applies to the recorded party.
-  const { data: hit } = await db
+  // Suppression still applies to the recorded party. Several rows can match, so
+  // take the first instead of failing the query on a multi-row result.
+  const { data: hits } = await db
     .from("suppressions")
     .select("id, reason")
     .eq("legal_entity_id", legalEntityId)
     .eq("identifier", input.calledE164)
     .in("channel", ["voice", "all"])
-    .maybeSingle();
+    .limit(1);
+  const hit = (hits ?? [])[0];
+
   if (hit) {
     rules.push({ rule: "suppression", result: "deny", detail: `Suppressed (${hit.reason})` });
     deniedBy = "suppression";
