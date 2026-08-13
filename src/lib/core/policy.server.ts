@@ -137,16 +137,18 @@ export async function assertPolicy(
 
   const messagingAction = input.action === "send" || input.action === "call";
 
-  // 1. Suppression
+  // 1. Suppression. Multiple rows can match (channel-specific plus 'all'), so
+  //    never use maybeSingle here — a multi-row error would silently pass.
   if (input.identifier) {
     const channels = [input.channel ?? "sms", "all"];
-    const { data: hit } = await db
+    const { data: hits } = await db
       .from("suppressions")
       .select("id, reason, channel")
       .eq("legal_entity_id", legalEntityId)
       .eq("identifier", input.identifier)
       .in("channel", channels)
-      .maybeSingle();
+      .limit(1);
+    const hit = (hits ?? [])[0];
     if (hit) deny("suppression", `Suppressed for this entity (${hit.reason})`);
     else pass("suppression");
   } else {
@@ -159,19 +161,23 @@ export async function assertPolicy(
     skip("litigator_list", "litigator scrub provider not configured");
   }
 
-  // 4. Line type
+  // 4. Line type. The same number can belong to several contacts in one entity;
+  //    any blocked line type on that number denies.
   if (!deniedBy && messagingAction && input.identifier) {
-    const { data: phone } = await db
+    const { data: phones } = await db
       .from("contact_phones")
       .select("line_type")
       .eq("legal_entity_id", legalEntityId)
       .eq("e164", input.identifier)
-      .maybeSingle();
-    const lineType = phone?.line_type ?? null;
-    if (lineType && merged.block_line_types.includes(lineType))
-      deny("line_type", `${lineType} numbers are blocked for this workspace`);
-    else pass("line_type", lineType ?? "unknown");
+      .limit(20);
+    const lineTypes = (phones ?? [])
+      .map((p) => p.line_type as string | null)
+      .filter((t): t is string => Boolean(t));
+    const blocked = lineTypes.find((t) => merged.block_line_types.includes(t));
+    if (blocked) deny("line_type", `${blocked} numbers are blocked for this workspace`);
+    else pass("line_type", lineTypes[0] ?? "unknown");
   }
+
 
   // 5. Quiet hours in the contact's local time
   if (!deniedBy && messagingAction) {
