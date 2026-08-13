@@ -143,7 +143,14 @@ export const Route = createFileRoute("/api/public/v1/contacts")({
           .eq("legal_entity_id", scope.legalEntityId)
           .order("updated_at", { ascending: false })
           .limit(50);
-        if (q) query = query.or(`first_name.ilike.%${q}%,last_name.ilike.%${q}%,company.ilike.%${q}%`);
+        if (q) {
+          // Commas, parens and wildcards would otherwise break out of the filter grammar.
+          const safe = q.replace(/[,()%\\*]/g, " ").trim();
+          if (safe)
+            query = query.or(
+              `first_name.ilike.%${safe}%,last_name.ilike.%${safe}%,company.ilike.%${safe}%`,
+            );
+        }
         const { data } = await query;
         return json({ contacts: data ?? [] });
       },
