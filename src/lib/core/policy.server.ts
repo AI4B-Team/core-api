@@ -199,7 +199,8 @@ export async function assertPolicy(
     else pass("quiet_hours", `${hour}:00 ${tz}`);
   }
 
-  // 6. Daily per-contact frequency cap
+  // 6. Daily per-contact frequency cap. Messages that never left Core
+  //    (failed / rejected) do not consume the contact's daily allowance.
   if (!deniedBy && messagingAction && input.contactId) {
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { count } = await db
@@ -208,7 +209,8 @@ export async function assertPolicy(
       .eq("workspace_id", input.workspaceId)
       .eq("direction", "outbound")
       .gte("created_at", since)
-      .eq("to_identifier", input.identifier ?? "");
+      .eq("to_identifier", input.identifier ?? "")
+      .not("status", "in", "(failed,rejected)");
     if ((count ?? 0) >= merged.daily_cap_per_contact)
       deny("frequency_cap", `${count} outbound in 24h, cap is ${merged.daily_cap_per_contact}`);
     else pass("frequency_cap", `${count ?? 0}/${merged.daily_cap_per_contact}`);
@@ -225,15 +227,19 @@ export async function assertPolicy(
     const brand =
       (brands ?? []).find((b) => b.status === "verified") ?? (brands ?? [])[0] ?? null;
     if (!brand) deny("brand_status", "no 10DLC brand registered for this legal entity");
-
     else if (brand.status !== "verified") deny("brand_status", `brand status is ${brand.status}`);
     else {
-      const { data: campaign } = await db
+      const { data: campaigns } = await db
         .from("campaigns_10dlc")
         .select("id, status")
         .eq("brand_id", brand.id)
         .eq("app_id", input.appId)
-        .maybeSingle();
+        .limit(20);
+      const campaign =
+        (campaigns ?? []).find((c) => c.status === "active" || c.status === "verified") ??
+        (campaigns ?? [])[0] ??
+        null;
+
       if (!campaign) deny("campaign_status", `no 10DLC campaign for app ${input.appId}`);
       else if (campaign.status !== "active" && campaign.status !== "verified")
         deny("campaign_status", `campaign status is ${campaign.status}`);
