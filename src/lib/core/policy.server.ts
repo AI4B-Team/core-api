@@ -319,14 +319,17 @@ export async function assertCanRecord(
   if (!workspace) throw new Error("workspace_not_found");
   const legalEntityId = workspace.legal_entity_id as string;
 
-  // Suppression still applies to the recorded party.
-  const { data: hit } = await db
+  // Suppression still applies to the recorded party. Several rows can match, so
+  // take the first instead of failing the query on a multi-row result.
+  const { data: hits } = await db
     .from("suppressions")
     .select("id, reason")
     .eq("legal_entity_id", legalEntityId)
     .eq("identifier", input.calledE164)
     .in("channel", ["voice", "all"])
-    .maybeSingle();
+    .limit(1);
+  const hit = (hits ?? [])[0];
+
   if (hit) {
     rules.push({ rule: "suppression", result: "deny", detail: `Suppressed (${hit.reason})` });
     deniedBy = "suppression";
