@@ -214,14 +214,18 @@ export async function assertPolicy(
     else pass("frequency_cap", `${count ?? 0}/${merged.daily_cap_per_contact}`);
   }
 
-  // 7. Brand and campaign status
+  // 7. Brand and campaign status. An entity may hold more than one brand
+  //    record; a verified one satisfies the rule.
   if (!deniedBy && messagingAction && merged.require_verified_brand) {
-    const { data: brand } = await db
+    const { data: brands } = await db
       .from("brands")
       .select("id, status")
       .eq("legal_entity_id", legalEntityId)
-      .maybeSingle();
+      .limit(20);
+    const brand =
+      (brands ?? []).find((b) => b.status === "verified") ?? (brands ?? [])[0] ?? null;
     if (!brand) deny("brand_status", "no 10DLC brand registered for this legal entity");
+
     else if (brand.status !== "verified") deny("brand_status", `brand status is ${brand.status}`);
     else {
       const { data: campaign } = await db
