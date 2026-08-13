@@ -40,7 +40,10 @@ export const Route = createFileRoute("/api/public/v1/auth/refresh")({
         }
 
         await db.from("refresh_tokens").update({ revoked_at: new Date().toISOString() }).eq("token_hash", hash);
-        return json(await issueAccessToken(db, row.user_id as string, row.app_id as string, workspaceId));
+        const issued = await issueAccessToken(db, row.user_id as string, row.app_id as string, workspaceId);
+        if (!issued) return apiError("forbidden", 403);
+        return json(issued);
+
       },
     },
   },
