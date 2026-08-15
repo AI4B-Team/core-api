@@ -109,9 +109,20 @@ export const issueAuthCode = createServerFn({ method: "POST" })
       .eq("id", data.appId)
       .maybeSingle();
     const manifest = (app?.manifest ?? {}) as { redirect_uris?: string[] };
-    const allowed = manifest.redirect_uris ?? [];
-    if (allowed.length && !allowed.includes(redirect.toString()))
+    const allowed = (manifest.redirect_uris ?? []).map((u) => u.trim()).filter(Boolean);
+    // Fail closed: an app with no registered redirect URIs cannot receive a code.
+    if (!allowed.length) throw new Error("This app has no registered redirect URIs");
+    const normalize = (u: string) => {
+      try {
+        const parsed = new URL(u);
+        return `${parsed.origin}${parsed.pathname.replace(/\/$/, "")}`;
+      } catch {
+        return u;
+      }
+    };
+    if (!allowed.map(normalize).includes(normalize(redirect.toString())))
       throw new Error("redirect_uri is not registered for this app");
+
 
     const code = `core_ac_${randomToken(32)}`;
     await supabaseAdmin.from("auth_codes").insert({
