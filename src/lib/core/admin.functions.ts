@@ -14,7 +14,14 @@ export const ensureCoreUser = createServerFn({ method: "POST" })
       .maybeSingle();
     if (existing) return existing;
 
-    // First identity in an empty Core install bootstraps staff access.
+    // First identity in an empty Core install bootstraps staff access, but only
+    // if its email is on CORE_BOOTSTRAP_STAFF_EMAILS (comma-separated). Empty
+    // allowlist means nobody bootstraps.
+    const bootstrapEmails = (process.env["CORE_BOOTSTRAP_STAFF_EMAILS"] ?? "")
+      .split(",")
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean);
+    const canBootstrap = bootstrapEmails.includes((claims.email ?? "").toLowerCase());
     const { count } = await supabaseAdmin.from("users").select("id", { count: "exact", head: true });
     const { data } = await supabaseAdmin
       .from("users")
@@ -22,7 +29,7 @@ export const ensureCoreUser = createServerFn({ method: "POST" })
         id: context.userId,
         email: claims.email ?? `${context.userId}@unknown.local`,
         full_name: claims.user_metadata?.full_name ?? null,
-        is_staff: (count ?? 0) === 0,
+        is_staff: canBootstrap && (count ?? 0) === 0,
       })
       .select("id, is_staff, email, full_name")
       .single();
